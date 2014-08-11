@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry kind="lib" path="C:/Users/gavin/Downloads/wunderground-core-2.0.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/gavin/Desktop/WeatherLibraries/httpcore-4.3.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/gavin/Desktop/WeatherLibraries/httpmime-4.3.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/gavin/Desktop/WeatherLibraries/java-json.jar"/>
+	<classpathentry kind="lib" path="C:/Users/gavin/Desktop/WeatherLibraries/wunderground-core-1.0.8-jar-with-dependencies.jar"/>
+	<classpathentry kind="lib" path="C:/Users/gavin/Desktop/WeatherLibraries/commons-codec-1.6.jar"/>
+	<classpathentry kind="lib" path="C:/Users/gavin/Desktop/WeatherLibraries/commons-logging-1.1.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/gavin/Desktop/WeatherLibraries/fluent-hc-4.3.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/gavin/Desktop/WeatherLibraries/forecastio-lib-java.jar"/>
+	<classpathentry kind="lib" path="C:/Users/gavin/Desktop/WeatherLibraries/httpclient-4.3.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/gavin/Desktop/WeatherLibraries/httpclient-cache-4.3.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/gavin/Desktop/WeatherLibraries/OwmClient.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
