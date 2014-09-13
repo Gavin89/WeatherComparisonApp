@@ -14,7 +14,7 @@ public interface IWeatherSource {
 	public String getSummary();
 
 	//Returns windspeed from weather source
-	public int getWindSpeed();
+	public double getWindSpeed();
 	
 	//Returns location from weather source
 	public WeatherLocation getLocation();

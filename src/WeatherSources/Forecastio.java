@@ -41,15 +41,15 @@ public class Forecastio extends WeatherSource {
 	}
 
 	@Override
-	public int getWindSpeed()  {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getWindSpeed()  {
+		Double windSpeed = fio.getCurrently().get("windSpeed").asDouble();
+		return windSpeed;
 	}
 
 	@Override
 	public WeatherLocation getLocation() {
 		// TODO Auto-generated method stub
-		return new WeatherLocation("London", 54.22, 215.22);
+		return null;//new WeatherLocation("London", 54.22, 215.22);
 	}
 	
 	public String getName(){

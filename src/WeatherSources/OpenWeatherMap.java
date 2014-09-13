@@ -3,9 +3,9 @@ package WeatherSources;
 import java.io.IOException;
 import java.text.DecimalFormat;
 
-import org.bitpipeline.lib.com.OwmClient;
-import org.bitpipeline.lib.com.WeatherData;
-import org.bitpipeline.lib.com.WeatherStatusResponse;
+import org.bitpipeline.lib.owm.OwmClient;
+import org.bitpipeline.lib.owm.WeatherData;
+import org.bitpipeline.lib.owm.WeatherStatusResponse;
 import org.json.JSONException;
 
 import WC.WeatherLocation;
@@ -22,7 +22,8 @@ public class OpenWeatherMap extends  WeatherSource {
 		
 		WeatherStatusResponse owmResponse = null;;
 		try {
-			owmResponse = owm.currentWeatherAtCity(location.getLocationName(), "UK");
+			owmResponse = owm.currentWeatherAtCity(location.getLatitude().floatValue(), location.getLongitude().floatValue(), 1);
+	
 		} catch (IOException | JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -31,10 +32,6 @@ public class OpenWeatherMap extends  WeatherSource {
 		System.out.println(owmResponse.getMessage());
 
 		owmClient = owmResponse.getWeatherStatus().get(0);
-		
-		System.out.println(owmClient.getTemp());
-		
-		
 	}
 	
 	@Override
@@ -53,9 +50,9 @@ public class OpenWeatherMap extends  WeatherSource {
 	}
 
 	@Override
-	public int getWindSpeed() {
+	public double getWindSpeed() {
 		
-		return (int) owmClient.getWindSpeed();
+		return owmClient.getWindSpeed();
 	}
 
 	@Override

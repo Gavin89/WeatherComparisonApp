@@ -24,9 +24,9 @@ public class MettOffice extends  WeatherSource{
 	}
 
 	@Override
-	public int getWindSpeed() {
+	public double getWindSpeed() {
 		// TODO Auto-generated method stub
-		return 0;
+		return 0.0;
 	}
 
 	@Override

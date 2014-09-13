@@ -11,11 +11,11 @@ public class WeatherLocation {
 		this.locationName = locatioName;
 	}
 	
-	public double getLatitude() {
+	public Double getLatitude() {
 		return this.latitude;
 	}
 	
-	public double getLongitude() {
+	public Double getLongitude() {
 		return this.longitude;
 	}
 	

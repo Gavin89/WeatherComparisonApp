@@ -24,7 +24,7 @@ public class Observations extends  WeatherSource{
 	}
 
 	@Override
-	public int getWindSpeed()  {
+	public double getWindSpeed()  {
 		// TODO Auto-generated method stub
 		return 0;
 	}

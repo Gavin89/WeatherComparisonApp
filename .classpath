@@ -14,5 +14,6 @@
 	<classpathentry kind="lib" path="C:/Users/gavin/Desktop/WeatherLibraries/httpclient-4.3.3.jar"/>
 	<classpathentry kind="lib" path="C:/Users/gavin/Desktop/WeatherLibraries/httpclient-cache-4.3.3.jar"/>
 	<classpathentry kind="lib" path="C:/Users/gavin/Desktop/WeatherLibraries/OwmClient.jar"/>
+	<classpathentry kind="lib" path="C:/Users/gavin/Desktop/WeatherLibraries/mongo-java-driver-2.12.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

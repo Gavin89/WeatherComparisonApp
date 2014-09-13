@@ -23,7 +23,7 @@ public class WeatherSource implements IWeatherSource {
 	}
 
 	@Override
-	public int getWindSpeed() {
+	public double getWindSpeed() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
