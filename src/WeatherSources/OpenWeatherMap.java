@@ -28,8 +28,6 @@ public class OpenWeatherMap extends  WeatherSource {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		System.out.println(owmResponse.getMessage());
 
 		owmClient = owmResponse.getWeatherStatus().get(0);
 	}
