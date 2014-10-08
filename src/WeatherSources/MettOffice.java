@@ -9,11 +9,13 @@ import WC.WeatherLocation;
 import WeatherSource.WeatherSource;
 
 public class MettOffice extends  WeatherSource{
-
+	
+	WeatherLocation newLocation;
 	public MettOffice(WeatherLocation location) {
 		super(location);
 		try {
-			WeatherLocation newLocation = MetOfficeLocationProvider.getSpecifiedLocation(location.getLocationName());
+			 newLocation = MetOfficeLocationProvider.getSpecifiedLocation(location.getLocationName());
+			System.out.println(newLocation);
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -42,7 +44,8 @@ public class MettOffice extends  WeatherSource{
 	@Override
 	public WeatherLocation getLocation()  {
 		// TODO Auto-generated method stub
-		return null;
+		return this.newLocation;
+		
 	}
 
 	public String getName(){
