@@ -5,10 +5,10 @@ public class WeatherLocation {
 	private double longitude;
 	private String locationName;
 
-	public WeatherLocation(String locatioName, double latitude, double longitude) {
+	public WeatherLocation(String locationName, double latitude, double longitude) {
 		this.latitude = latitude;
 		this.longitude = longitude;
-		this.locationName = locatioName;
+		this.locationName = locationName;
 	}
 	
 	public Double getLatitude() {

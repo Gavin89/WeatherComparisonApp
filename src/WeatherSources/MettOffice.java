@@ -1,6 +1,10 @@
+
 package WeatherSources;
 
 
+import java.net.UnknownHostException;
+
+import WC.MetOfficeLocationProvider;
 import WC.WeatherLocation;
 import WeatherSource.WeatherSource;
 
@@ -8,6 +12,12 @@ public class MettOffice extends  WeatherSource{
 
 	public MettOffice(WeatherLocation location) {
 		super(location);
+		try {
+			WeatherLocation newLocation = MetOfficeLocationProvider.getSpecifiedLocation(location.getLocationName());
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		// TODO Auto-generated constructor stub
 	}
 
