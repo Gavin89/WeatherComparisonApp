@@ -7,6 +7,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 
 public class MetOfficeLocationProvider {
@@ -18,14 +19,22 @@ public class MetOfficeLocationProvider {
 		DBCollection coll = db.getCollection("testCollection");
 		BasicDBObject query = new BasicDBObject("name", location);
 
-		DBCursor cursor = coll.find(query);
+		DBCursor cur = coll.find(query);
 
 		try {
-		   while(cursor.hasNext()) {
-		       System.out.println(cursor.next());
+		   while(cur.hasNext()) {
+			   DBObject resultElement = null;
+			   resultElement = cur.next();
+			   String locationName = (String) resultElement.get("name");
+			   if(locationName != location){
+				   break;
+			   }
+			   else {
+			   }
+		       System.out.println(cur.next());
 		   }
 		} finally {
-		   cursor.close();
+		   cur.close();
 		}
 		
 		return null;

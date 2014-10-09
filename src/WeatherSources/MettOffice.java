@@ -13,7 +13,7 @@ public class MettOffice extends  WeatherSource{
 	public MettOffice(WeatherLocation location) {
 		super(location);
 		try {
-			WeatherLocation newLocation = MetOfficeLocationProvider.getSpecifiedLocation(location.getLocationName());
+			WeatherLocation newLocation = MetOfficeLocationProvider.getSpecifiedLocation(location.getLocationName());	
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
