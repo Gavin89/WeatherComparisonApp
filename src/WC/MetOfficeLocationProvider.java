@@ -15,14 +15,15 @@ public class MetOfficeLocationProvider {
 	public static WeatherLocation getSpecifiedLocation(String location) throws UnknownHostException{
 		
 		MongoClient mongoClient = new MongoClient();
-		DB db = mongoClient.getDB("test");
-		DBCollection coll = db.getCollection("testCollection");
+		DB db = mongoClient.getDB("locations");
+		DBCollection coll = db.getCollection("MetOfficeLocations");
 		BasicDBObject query = new BasicDBObject("name", location);
 
 		DBCursor cur = coll.find(query);
 
 		try {
 		   while(cur.hasNext()) {
+			   
 			   DBObject resultElement = null;
 			   resultElement = cur.next();
 			   String locationName = (String) resultElement.get("name");
