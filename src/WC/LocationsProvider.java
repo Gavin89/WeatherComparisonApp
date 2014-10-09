@@ -34,7 +34,8 @@ public class LocationsProvider implements Iterable<WeatherLocation> {
 			String locationName = (String) resultElement.get("name");			
 			String longitude =  (String) resultElement.get("latitude");	
 			String latitude = (String) resultElement.get("longitude");	
-			this.locations.put(locationName, new WeatherLocation(locationName, Double.parseDouble(longitude), Double.parseDouble(latitude)));	
+			String locationId = null;	
+			this.locations.put(locationName, new WeatherLocation(locationName, Double.parseDouble(longitude), Double.parseDouble(latitude), locationId));	
 		}
 	}
 

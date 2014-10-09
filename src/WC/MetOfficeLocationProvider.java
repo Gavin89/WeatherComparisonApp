@@ -19,23 +19,15 @@ public class MetOfficeLocationProvider {
 		DBCollection coll = db.getCollection("MetOfficeLocations");
 		BasicDBObject query = new BasicDBObject("name", location);
 
-		DBCursor cur = coll.find(query);
+		DBObject result = coll.findOne(query);
 
-		try {
-		   while(cur.hasNext()) {
-			   
-			   DBObject resultElement = null;
-			   resultElement = cur.next();
-			   String locationName = (String) resultElement.get("name");
-			   if(locationName != location){
-				   break;
-			   }
-			   else {
-			   }
-		       System.out.println(cur.next());
-		   }
-		} finally {
-		   cur.close();
+		if (result != null) {
+			String name = result.get("name").toString();
+			Double lat = Double.parseDouble(result.get("latitude").toString());
+			Double lng = Double.parseDouble(result.get("longitude").toString());
+			String id = (String) result.get("id");	
+			WeatherLocation loc = new WeatherLocation(name, lat, lng, id);
+			return loc;
 		}
 		
 		return null;

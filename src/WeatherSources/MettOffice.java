@@ -12,8 +12,12 @@ public class MettOffice extends  WeatherSource{
 
 	public MettOffice(WeatherLocation location) {
 		super(location);
-		try {
+		try {		
+
 			WeatherLocation newLocation = MetOfficeLocationProvider.getSpecifiedLocation(location.getLocationName());	
+			System.out.println("Location name: " + newLocation.getLocationName() + "Location id: " + newLocation.getLocationId());
+			String locationId = newLocation.getLocationId();
+			
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -41,6 +45,11 @@ public class MettOffice extends  WeatherSource{
 
 	@Override
 	public WeatherLocation getLocation()  {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public WeatherLocation getLocationId()  {
 		// TODO Auto-generated method stub
 		return null;
 	}
