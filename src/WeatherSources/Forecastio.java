@@ -24,7 +24,8 @@ public class Forecastio extends WeatherSource {
 		// TODO Auto-generated method stub
 
 		Double currently = fio.getCurrently().get("temperature").asDouble();
-		return currently;
+		double temp = Math.round(currently * 100.0) / 100.0;
+		return temp;
 	}
 
 	@Override
