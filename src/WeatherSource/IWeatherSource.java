@@ -1,6 +1,6 @@
 package WeatherSource;
 
-import java.io.IOException;
+import java.util.Date;
 
 import WC.WeatherLocation;
 
@@ -18,7 +18,13 @@ public interface IWeatherSource {
 	
 	//Returns location from weather source
 	public WeatherLocation getLocation();
-	
+		
 	//Returns name of the weather source
 	public String getName();
+	
+	//Return the current date in UNIX
+	public long getUnixDate();
+	
+	//Return the current date
+	public Date getDate();
 }

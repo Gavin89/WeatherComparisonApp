@@ -5,7 +5,6 @@
 	<classpathentry kind="lib" path="packages/commons-codec-1.6.jar"/>
 	<classpathentry kind="lib" path="packages/commons-logging-1.1.3.jar"/>
 	<classpathentry kind="lib" path="packages/fluent-hc-4.3.3.jar"/>
-	<classpathentry kind="lib" path="packages/forecastio-lib-java.jar"/>
 	<classpathentry kind="lib" path="packages/httpclient-4.3.3.jar"/>
 	<classpathentry kind="lib" path="packages/httpclient-cache-4.3.3.jar"/>
 	<classpathentry kind="lib" path="packages/httpcore-4.3.2.jar"/>
@@ -15,5 +14,7 @@
 	<classpathentry kind="lib" path="packages/OwmClient_old.jar"/>
 	<classpathentry kind="lib" path="packages/OwmClient.jar"/>
 	<classpathentry kind="lib" path="packages/wunderground-core-1.0.8-jar-with-dependencies.jar"/>
+	<classpathentry kind="lib" path="C:/Users/G/Desktop/WeatherLibraries/forecastio-lib-java.jar"/>
+	<classpathentry kind="lib" path="C:/Users/G/Desktop/forecastio-java.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

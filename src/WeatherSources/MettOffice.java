@@ -111,11 +111,6 @@ public class MettOffice extends  WeatherSource{
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	public WeatherLocation getLocationId()  {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	public String getName(){
 		return "MettOffice";

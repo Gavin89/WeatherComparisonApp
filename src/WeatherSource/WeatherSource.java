@@ -1,5 +1,7 @@
 package WeatherSource;
 
+import java.util.Date;
+
 import WC.WeatherLocation;
 
 public class WeatherSource implements IWeatherSource {
@@ -38,6 +40,18 @@ public class WeatherSource implements IWeatherSource {
 	public String getName() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Date getDate() {
+		return null;
+		// TODO Auto-generated method stub	
+	}
+
+	@Override
+	public long getUnixDate() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }
