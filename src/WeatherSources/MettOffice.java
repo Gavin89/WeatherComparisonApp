@@ -47,7 +47,7 @@ public class MettOffice extends  WeatherSource{
 			     }
 			    
 			    
-			     System.out.println(json);
+			    //System.out.println(json);
 			    //String temp = (String) json.get("title");
 			    
 			} catch (Exception e) {
@@ -97,13 +97,29 @@ public class MettOffice extends  WeatherSource{
 	@Override
 	public String getSummary()  {
 		// TODO Auto-generated method stub
-		return null;
+		String currentSummary = null;
+		try {
+			currentSummary = repObj.getString("F");
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return currentSummary;
 	}
 
 	@Override
 	public double getWindSpeed() {
 		// TODO Auto-generated method stub
-		return 0.0;
+		Double currentWindspeed = null;
+		try {
+			currentWindspeed = repObj.getDouble("S");
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return currentWindspeed;
 	}
 
 	@Override

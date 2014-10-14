@@ -1,5 +1,6 @@
 package WeatherSource;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import WC.WeatherLocation;
@@ -44,14 +45,32 @@ public class WeatherSource implements IWeatherSource {
 
 	@Override
 	public Date getDate() {
+		
 		return null;
 		// TODO Auto-generated method stub	
 	}
 
 	@Override
-	public long getUnixDate() {
-		// TODO Auto-generated method stub
-		return 0;
+	public String getParsedDate() {
+		java.util.Date  ss1= new Date();
+		SimpleDateFormat formatter5=new SimpleDateFormat("dd/MM/yyyy");
+		String formats1 = formatter5.format(ss1);
+		
+		return formats1;
 	}
 
+	@Override
+	public Double getLongitude() {
+		// TODO Auto-generated method stub
+		return this.location.getLongitude();
+	}
+
+	@Override
+	public Double getLatitude() {
+		// TODO Auto-generated method stub
+		return this.location.getLatitude();
+	}
+	
+	
+	
 }

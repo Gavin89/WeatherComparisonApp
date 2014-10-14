@@ -21,10 +21,16 @@ public interface IWeatherSource {
 		
 	//Returns name of the weather source
 	public String getName();
-	
-	//Return the current date in UNIX
-	public long getUnixDate();
-	
+		
 	//Return the current date
 	public Date getDate();
+	
+	//Return date in format DD/MM/YYYY
+	public String getParsedDate();
+	
+	//Returns longitude of location
+	public Double getLongitude();
+	
+	//Returns latitude of location
+	public Double getLatitude();
 }

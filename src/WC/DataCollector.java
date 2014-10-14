@@ -18,15 +18,20 @@ public class DataCollector implements Runnable {
 
 	private void collect() {
 		for (WeatherLocation loc : this.locProvider) {
-			System.out.println("\n");
+
 			System.out.println("Getting data for location "+loc.getLocationName());
 			
 			WeatherSourcesProvider wsProvider = new WeatherSourcesProvider(loc);
 			
 			for (WeatherSource ws : wsProvider) {
-				System.out.println("\t Temp from "+ws.getName()+" is "+ws.getTemp());
-				System.out.println("\t Windspeed from "+ws.getName()+" is "+ws.getWindSpeed());
-				System.out.println("\t Date is "+ws.getUnixDate());
+				System.out.println("\t Getting data from " + ws.getName());
+				System.out.println("\t Temp: " + ws.getTemp());
+				System.out.println("\t Windspeed: " +ws.getWindSpeed());
+				System.out.println("\t Date: " +ws.getParsedDate());
+				System.out.println("\t Longitude: " + ws.getLongitude());
+				System.out.println("\t Latitude: " + ws.getLatitude());
+				System.out.println("\t Summary: " + ws.getSummary());
+				System.out.println("");
 			}
 			
 			/**

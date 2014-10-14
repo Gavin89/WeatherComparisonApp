@@ -1,15 +1,16 @@
 package WeatherSources;
 
-import java.lang.reflect.Array;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import WC.WeatherLocation;
 import WeatherSource.WeatherSource;
 
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
+import com.eclipsesource.json.JsonValue;
 import com.github.dvdme.ForecastIOLib.ForecastIO;
 
 public class Forecastio extends WeatherSource {
@@ -22,17 +23,11 @@ public class Forecastio extends WeatherSource {
 
 		fio = new ForecastIO("cc450ce1a780afa5207fd28ea384c27b"); //instantiate the class with the API key. 
 		fio.setUnits(ForecastIO.UNITS_SI); //sets the units as SI - optional
-
-		dates = new long[5];
-
-		for (int i = 0; i < dates.length; i++){
-			long currentDate = this.getUnixDate();
-			dates[i] = currentDate;
-			currentDate += 1440 * 60;
-			fio.getForecast(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()), dates[i]);   //sets the latitude and longitude - not optional
-			
-		}
+		
+		fio.getForecast(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));   //sets the latitude and longitude - not optional
+	
 	}
+
 
 	@Override
 	public Double getTemp() {
@@ -51,6 +46,7 @@ public class Forecastio extends WeatherSource {
 		for (int i = 0; i < hourly.size(); i++) {
 			JsonObject hourlyObject = hourly.get(i).asObject();
 			String summary = hourlyObject.get("summary").asString();
+			return summary;
 		}
 
 		return null;
