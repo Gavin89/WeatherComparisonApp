@@ -16,7 +16,6 @@ import com.github.dvdme.ForecastIOLib.ForecastIO;
 public class Forecastio extends WeatherSource {
 
 	ForecastIO fio;
-	long[] dates;
 
 	public Forecastio(WeatherLocation location) {
 		super(location);
@@ -55,13 +54,14 @@ public class Forecastio extends WeatherSource {
 	@Override
 	public double getWindSpeed()  {
 		Double windSpeed = fio.getCurrently().get("windSpeed").asDouble();
-		return windSpeed;
+		double windspeedMPH = windSpeed * 2.2369;
+		return windspeedMPH;
 	}
 
 	@Override
 	public WeatherLocation getLocation() {
 		// TODO Auto-generated method stub
-		return null;//new WeatherLocation("London", 54.22, 215.22);
+		return null;
 	}
 
 	public String getName(){
@@ -72,10 +72,4 @@ public class Forecastio extends WeatherSource {
 		Date currentUnixDate = new Date();
 		return currentUnixDate.getTime() / 1000;
 	}
-
-	public Date getDate(){
-		Date currentDate = new Date();
-		return currentDate;
-	}
-
 }
