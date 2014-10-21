@@ -50,7 +50,9 @@ public class OpenWeatherMap extends  WeatherSource {
 	@Override
 	public double getWindSpeed() {
 		
-		return owmClient.getWindSpeed();
+		double windSpeed = Math.round(owmClient.getWindSpeed() * 100.0) / 100.0;
+		
+		return windSpeed;
 	}
 
 	@Override
