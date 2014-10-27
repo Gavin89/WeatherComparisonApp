@@ -16,5 +16,6 @@
 	<classpathentry kind="lib" path="packages/wunderground-core-1.0.8-jar-with-dependencies.jar"/>
 	<classpathentry kind="lib" path="C:/Users/G/Desktop/WeatherLibraries/forecastio-lib-java.jar"/>
 	<classpathentry kind="lib" path="C:/Users/G/Desktop/forecastio-java.jar"/>
+	<classpathentry kind="lib" path="packages/OWM_JAPIs.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
