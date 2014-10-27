@@ -24,6 +24,7 @@ public class DataCollector implements Runnable {
 			WeatherSourcesProvider wsProvider = new WeatherSourcesProvider(loc);
 			
 			for (WeatherSource ws : wsProvider) {
+
 				System.out.println("\t Getting data from " + ws.getName());
 				System.out.println("\t Temp: " + ws.getTemp());
 				System.out.println("\t Windspeed: " +ws.getWindSpeed());
@@ -32,6 +33,7 @@ public class DataCollector implements Runnable {
 				System.out.println("\t Latitude: " + ws.getLatitude());
 				System.out.println("\t Summary: " + ws.getSummary());
 				System.out.println("");
+
 			}
 			
 			/**

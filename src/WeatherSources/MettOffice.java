@@ -59,7 +59,7 @@ public class MettOffice extends  WeatherSource{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -133,6 +133,7 @@ public class MettOffice extends  WeatherSource{
 	public WeatherLocation getLocation()  {
 		// TODO Auto-generated method stub
 		return null;
+		
 	}
 
 	public String getName(){

@@ -2,16 +2,13 @@ package WeatherSources;
 
 import java.util.Date;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import WC.WeatherLocation;
 import WeatherSource.WeatherSource;
 
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
-import com.eclipsesource.json.JsonValue;
-import com.github.dvdme.ForecastIOLib.ForecastIO;
+
+import dme.forecastiolib.ForecastIO;
 
 public class Forecastio extends WeatherSource {
 

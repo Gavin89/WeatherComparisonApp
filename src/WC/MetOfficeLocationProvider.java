@@ -19,7 +19,9 @@ public class MetOfficeLocationProvider {
 		DBCollection coll = db.getCollection("MetOfficeLocations");
 		BasicDBObject query = new BasicDBObject("name", location);
 
+
 		DBObject result = coll.findOne(query);
+
 
 		if (result != null) {
 			String name = result.get("name").toString();
