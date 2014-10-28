@@ -1,5 +1,5 @@
-
 package WeatherSources;
+
 
 
 import java.io.BufferedReader;
@@ -16,13 +16,13 @@ import WC.MetOfficeLocationProvider;
 import WC.WeatherLocation;
 import WeatherSource.WeatherSource;
 
-public class MettOffice extends  WeatherSource{
+public class MetOffice extends  WeatherSource{
 	
 	private JSONObject json;
 	private JSONObject repObj;
 	private HashMap<String, String> summaryList;
 	
-	public MettOffice(WeatherLocation location) {
+	public MetOffice(WeatherLocation location) {
 		
 		super(location);
 		summaryList = new HashMap<String, String>();
@@ -34,18 +34,22 @@ public class MettOffice extends  WeatherSource{
 			String locationId = newLocation.getLocationId();
 			
 			try {
-			     json = new JSONObject(readUrl("http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/" + locationId + "?res=3hourly&key=cb3f0007-c6a0-4633-9166-7fbbc8e76c9f	"));
-			     JSONObject siteRep = json.getJSONObject("SiteRep");
+				for(int i = 0; i < 24; i+=3){
+			     json = new JSONObject(readUrl("http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/" + locationId + "?res=3hourly&time=" + this.getTomorrowDate() + "T" + i + "Z&key=cb3f0007-c6a0-4633-9166-7fbbc8e76c9f"));
+				}
+				JSONObject siteRep = json.getJSONObject("SiteRep");
 			     JSONObject wx = siteRep.getJSONObject("Wx");
 			     JSONObject dv = siteRep.getJSONObject("DV");
 			     JSONObject locationObj = dv.getJSONObject("Location");
-			     JSONArray periods = locationObj.getJSONArray("Period");
+			     JSONObject periods = locationObj.getJSONObject("Period");
+			     JSONArray
 			     
 			     for (int i = 0; i < periods.length(); i++) {
 			    	JSONObject period = periods.getJSONObject(i);
 			    	JSONArray reps = period.getJSONArray("Rep");
 			    	for (int repI = 0; repI < reps.length(); repI++) {
 			    		repObj = reps.getJSONObject(repI);
+			    		
 			    		int numOfMinutes = repObj.getInt("$");
 			    		//System.out.println("NoM: "+numOfMinutes);
 			    	}

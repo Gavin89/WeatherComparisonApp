@@ -33,4 +33,7 @@ public interface IWeatherSource {
 	
 	//Returns latitude of location
 	public Double getLatitude();
+	
+	//Returns tomorrows date
+	public String getTomorrowDate();
 }

@@ -5,7 +5,7 @@ import java.util.Iterator;
 
 import WeatherSource.WeatherSource;
 import WeatherSources.Forecastio;
-import WeatherSources.MettOffice;
+import WeatherSources.MetOffice;
 import WeatherSources.Observations;
 import WeatherSources.OpenWeatherMap;
 import WeatherSources.Wunderground;
@@ -17,7 +17,7 @@ public class WeatherSourcesProvider implements Iterable<WeatherSource> {
 	
 	private void registerSources() {
 		this.registerWeatherSource(new Forecastio(location));
-		this.registerWeatherSource(new MettOffice(location));
+		this.registerWeatherSource(new MetOffice(location));
 		this.registerWeatherSource(new OpenWeatherMap(location));
 		this.registerWeatherSource(new Wunderground(location));
 		this.registerWeatherSource(new Observations(location));

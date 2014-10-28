@@ -20,8 +20,8 @@ public class Forecastio extends WeatherSource {
 		fio = new ForecastIO("cc450ce1a780afa5207fd28ea384c27b"); //instantiate the class with the API key. 
 		fio.setUnits(ForecastIO.UNITS_SI); //sets the units as SI - optional
 		
-		fio.getForecast(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));   //sets the latitude and longitude - not optional
-	
+		fio.getForecast(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));//sets the latitude and longitude - not optional
+		System.out.println(fio.getTime());
 	}
 
 
