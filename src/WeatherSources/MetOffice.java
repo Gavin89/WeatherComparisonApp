@@ -6,27 +6,28 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import WC.ForecastItem;
 import WC.MetOfficeLocationProvider;
 import WC.WeatherLocation;
 import WeatherSource.WeatherSource;
 
 public class MetOffice extends  WeatherSource{
 	
-	private JSONObject json;
-	private JSONObject repObj;
+
 	private HashMap<String, String> summaryList;
 	
 	public MetOffice(WeatherLocation location) {
 		
 		super(location);
 		summaryList = new HashMap<String, String>();
-		//this.summaryList();
+		
+		this.summaryList();
 		try {		
 			
 			WeatherLocation newLocation = MetOfficeLocationProvider.getSpecifiedLocation(location.getLocationName());	
@@ -35,27 +36,18 @@ public class MetOffice extends  WeatherSource{
 			
 			try {
 				for(int i = 0; i < 24; i+=3){
-			     json = new JSONObject(readUrl("http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/" + locationId + "?res=3hourly&time=" + this.getTomorrowDate() + "T" + i + "Z&key=cb3f0007-c6a0-4633-9166-7fbbc8e76c9f"));
-				}
-				JSONObject siteRep = json.getJSONObject("SiteRep");
+			     JSONObject json = new JSONObject(readUrl("http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/" + locationId + "?res=3hourly&time=" + this.getTomorrowDate() + "T" + i + "Z&key=cb3f0007-c6a0-4633-9166-7fbbc8e76c9f"));
+				
+			     JSONObject siteRep = json.getJSONObject("SiteRep");
 			     JSONObject wx = siteRep.getJSONObject("Wx");
 			     JSONObject dv = siteRep.getJSONObject("DV");
 			     JSONObject locationObj = dv.getJSONObject("Location");
 			     JSONObject periods = locationObj.getJSONObject("Period");
-			     JSONArray
-			     
-			     for (int i = 0; i < periods.length(); i++) {
-			    	JSONObject period = periods.getJSONObject(i);
-			    	JSONArray reps = period.getJSONArray("Rep");
-			    	for (int repI = 0; repI < reps.length(); repI++) {
-			    		repObj = reps.getJSONObject(repI);
-			    		
-			    		int numOfMinutes = repObj.getInt("$");
-			    		//System.out.println("NoM: "+numOfMinutes);
-			    	}
-			     }
-			    
-			    
+			     JSONObject rep = periods.getJSONObject("Rep");
+			     ForecastItem item = new ForecastItem(i, rep.getDouble("T"), rep.getDouble("S"), 
+			     summaryList.get(rep.getString("W")));
+			     this.addForecast(item);
+				}
 			    //System.out.println(json);
 			    //String temp = (String) json.get("title");
 			    
@@ -87,50 +79,6 @@ public class MetOffice extends  WeatherSource{
 	        if (reader != null)
 	            reader.close();
 	    }
-	}
-
-	@Override
-	public Double getTemp()  {
-		// TODO Auto-generated method stub
-		Double currentTemp = null;
-		try {
-			currentTemp = (Double) repObj.getDouble("T");
-			
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return currentTemp;
-	}
-
-	@Override
-	public String getSummary()  {
-		// TODO Auto-generated method stub
-		this.summaryList();
-		String currentSummary = "";
-		try {
-			currentSummary = repObj.getString("F");
-			currentSummary = summaryList.get(currentSummary);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return currentSummary;
-	}
-
-	@Override
-	public double getWindSpeed() {
-		// TODO Auto-generated method stub
-		Double currentWindspeed = null;
-		try {
-			currentWindspeed = repObj.getDouble("S");
-			
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return currentWindspeed;
 	}
 
 	@Override

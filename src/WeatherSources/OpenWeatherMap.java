@@ -32,28 +32,28 @@ public class OpenWeatherMap extends  WeatherSource {
 		owmClient = owmResponse.getWeatherStatus().get(0);
 	}
 	
-	@Override
-	public Double getTemp() {
-		
-		Double temp = (double) owmClient.getTemp();	
-        DecimalFormat twoDecimals = new DecimalFormat("#.");
-        return Double.valueOf(twoDecimals.format(temp));
-	}
-
-	@Override
-	public String getSummary()  {
-		owmClient.getWeatherConditions();
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public double getWindSpeed() {
-		
-		double windSpeed = Math.round(owmClient.getWindSpeed() * 100.0) / 100.0;
-		
-		return windSpeed;
-	}
+//	@Override
+//	public Double getTemp() {
+//		
+//		Double temp = (double) owmClient.getTemp();	
+//        DecimalFormat twoDecimals = new DecimalFormat("#.");
+//        return Double.valueOf(twoDecimals.format(temp));
+//	}
+//
+//	@Override
+//	public String getSummary()  {
+//		owmClient.getWeatherConditions();
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	@Override
+//	public double getWindSpeed() {
+//		
+//		double windSpeed = Math.round(owmClient.getWindSpeed() * 100.0) / 100.0;
+//		
+//		return windSpeed;
+//	}
 
 	@Override
 	public WeatherLocation getLocation() {

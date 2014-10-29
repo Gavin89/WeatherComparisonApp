@@ -15,7 +15,7 @@ public class WeatherSourcesProvider implements Iterable<WeatherSource> {
 	private ArrayList<WeatherSource> weatherSources;
 	private WeatherLocation location;
 	
-	private void registerSources() {
+	private void registerSources() throws Exception {
 		this.registerWeatherSource(new Forecastio(location));
 		this.registerWeatherSource(new MetOffice(location));
 		this.registerWeatherSource(new OpenWeatherMap(location));
@@ -23,7 +23,7 @@ public class WeatherSourcesProvider implements Iterable<WeatherSource> {
 		this.registerWeatherSource(new Observations(location));
 	}
 	
-	public WeatherSourcesProvider(WeatherLocation loc) {
+	public WeatherSourcesProvider(WeatherLocation loc) throws Exception {
 		
 		this.location = loc;
 		

@@ -1,5 +1,6 @@
 package WC;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 
 import WeatherSource.WeatherSource;
 
@@ -16,7 +17,7 @@ public class DataCollector implements Runnable {
 	}
 	
 
-	private void collect() {
+	private void collect() throws Exception {
 		for (WeatherLocation loc : this.locProvider) {
 
 			System.out.println("Getting data for location "+loc.getLocationName());
@@ -24,17 +25,17 @@ public class DataCollector implements Runnable {
 			WeatherSourcesProvider wsProvider = new WeatherSourcesProvider(loc);
 			
 			for (WeatherSource ws : wsProvider) {
-
-				for(int i = 0; i < 24; i+=3){
-				System.out.println("\t Time: " + i);
-				System.out.println("\t Getting data from " + ws.getName());
-				System.out.println("\t Temp: " + ws.getTemp());
-				System.out.println("\t Windspeed: " +ws.getWindSpeed());
-				System.out.println("\t Date: " +ws.getParsedDate());
-				System.out.println("\t Longitude: " + ws.getLongitude());
-				System.out.println("\t Latitude: " + ws.getLatitude());
-				System.out.println("\t Summary: " + ws.getSummary());
-				System.out.println("");
+				ArrayList<ForecastItem> items = ws.getForecasts();
+				for(ForecastItem item : items){
+					System.out.println("\t Time: " + item.getTime());
+					System.out.println("\t Getting data from " + ws.getName());
+					System.out.println("\t Temp: " + item.getTemp());
+					System.out.println("\t Windspeed: " +item.getWindspeed());
+					System.out.println("\t Date: " +ws.getTomorrowParsedDate());
+					System.out.println("\t Longitude: " + ws.getLongitude());
+					System.out.println("\t Latitude: " + ws.getLatitude());
+					System.out.println("\t Summary: " + item.getSummary());
+					System.out.println("");
 				}
 
 			}
@@ -64,6 +65,11 @@ public class DataCollector implements Runnable {
 
 	@Override
 	public void run() {
-		this.collect();
+		try {
+			this.collect();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
