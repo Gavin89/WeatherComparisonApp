@@ -27,16 +27,19 @@ public class DataCollector implements Runnable {
 			for (WeatherSource ws : wsProvider) {
 				ArrayList<ForecastItem> items = ws.getForecasts();
 				for(ForecastItem item : items){
+
 					System.out.println("\t Time: " + item.getTime());
+					System.out.println("\t Time: " + item.getUnixTime());
 					System.out.println("\t Getting data from " + ws.getName());
 					System.out.println("\t Temp: " + item.getTemp());
 					System.out.println("\t Windspeed: " +item.getWindspeed());
-					System.out.println("\t Date: " +ws.getTomorrowParsedDate());
+					System.out.println("\t Date: " +item.getDate());
 					System.out.println("\t Longitude: " + ws.getLongitude());
 					System.out.println("\t Latitude: " + ws.getLatitude());
 					System.out.println("\t Summary: " + item.getSummary());
 					System.out.println("");
 				}
+				
 
 			}
 			

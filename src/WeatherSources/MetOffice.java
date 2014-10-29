@@ -45,7 +45,7 @@ public class MetOffice extends  WeatherSource{
 			     JSONObject periods = locationObj.getJSONObject("Period");
 			     JSONObject rep = periods.getJSONObject("Rep");
 			     ForecastItem item = new ForecastItem(i, rep.getDouble("T"), rep.getDouble("S"), 
-			     summaryList.get(rep.getString("W")));
+			     summaryList.get(rep.getString("W")), null);
 			     this.addForecast(item);
 				}
 			    //System.out.println(json);

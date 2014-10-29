@@ -1,23 +1,30 @@
 package WC;
 
-import java.util.Date;
-
 public class ForecastItem {
 
 	private Double temp;
 	private Double windspeed;
 	private int time;
-	private Date unixTime;
+	private String unixTime;
+	private String date;
 
+	public String getDate(){
+		return date;
+	}
+	
+	public String setDate(String date){
+		return this.date = date;
+	}
+	
 	public Double getTemp() {
 		return temp;
 	}
 
-	public Date getUnixTime(Date unixTime){
-		return this.unixTime = unixTime;
+	public String getUnixTime(){
+		return unixTime;
 	}
 	
-	public void setUnixTime(Date unixTime){
+	public void setUnixTime(String unixTime){
 		this.unixTime = unixTime;
 	}
 	
@@ -48,19 +55,20 @@ public class ForecastItem {
 
 	private String summary;
 	
-	public ForecastItem(int time, Double temp, Double windspeed, String summary) {
+	public ForecastItem(int time, Double temp, Double windspeed, String summary, String date) {
 		this.temp = temp;
 		this.windspeed = windspeed;
 		this.summary = summary;
 		this.time = time;
+		this.date = date;
 	}
 
-	public ForecastItem(Date unixTime, double temp, double windspeed,
-			String summary) {
+	public ForecastItem(String unixTime, Double temp, Double windspeed, String summary, String date) {
 		this.temp = temp;
 		this.windspeed = windspeed;
 		this.summary = summary;
 		this.unixTime = unixTime;
+		this.date = date;
 		// TODO Auto-generated constructor stub
 	}
 	
