@@ -1,26 +1,30 @@
 package WC;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Timer;
 
 import WeatherSource.WeatherSource;
 
-public class DataCollector implements Runnable {
+public class DataCollector {
 	
 
 	private	LocationsProvider locProvider;
+	DataAnalyser data;
 	
 	
-	public DataCollector() throws UnknownHostException {
+	public DataCollector() throws Exception {
 		
 		this.locProvider = new LocationsProvider();
-		this.run();
+		this.collect();
 	}
 	
 
 	private void collect() throws Exception {
+		long startTime = System.currentTimeMillis();
+
+		data = new DataAnalyser();
 		for (WeatherLocation loc : this.locProvider) {
 
-			System.out.println("Getting data for location "+loc.getLocationName());
+			//System.out.println("Getting data for location "+loc.getLocationName());
 			
 			WeatherSourcesProvider wsProvider = new WeatherSourcesProvider(loc);
 			
@@ -28,16 +32,20 @@ public class DataCollector implements Runnable {
 				ArrayList<ForecastItem> items = ws.getForecasts();
 				for(ForecastItem item : items){
 
-					System.out.println("\t Getting data from " + ws.getName());
-					System.out.println("\t Time: " + item.getTime());
-					System.out.println("\t Time: " + item.getUnixTime());
-					System.out.println("\t Temp: " + item.getTemp());
-					System.out.println("\t Windspeed: " +item.getWindspeed());
-					System.out.println("\t Date: " +item.getDate());
-					System.out.println("\t Longitude: " + ws.getLongitude());
-					System.out.println("\t Latitude: " + ws.getLatitude());
-					System.out.println("\t Summary: " + item.getSummary());
-					System.out.println("");
+//					System.out.println("\t Getting data from " + ws.getName());
+//					System.out.println("\t Time: " + item.getTime());
+//					System.out.println("\t Time: " + item.getUnixTime());
+//					System.out.println("\t Temp: " + item.getTemp());
+//					System.out.println("\t Windspeed: " +item.getWindspeed());
+//					System.out.println("\t Date: " +item.getDate());
+//					System.out.println("\t Longitude: " + ws.getLongitude());
+//					System.out.println("\t Latitude: " + ws.getLatitude());
+//					System.out.println("\t Summary: " + item.getSummary());
+//					System.out.println("");	
+					
+					data.populateTempDB(loc.getLocationName(), ws.getName(), item.getTime(), item.getTemp(), item.getWindspeed(), 
+							item.getDate(), ws.getLongitude(), ws.getLatitude(), item.getSummary());
+					
 				}
 				
 
@@ -63,16 +71,9 @@ public class DataCollector implements Runnable {
 			 */
 			
 		}
-		
+		long endTime   = System.currentTimeMillis();
+		long totalTime = endTime - startTime;
+		System.out.println(totalTime);
 	}
-
-	@Override
-	public void run() {
-		try {
-			this.collect();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+	
 }

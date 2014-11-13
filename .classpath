@@ -15,5 +15,6 @@
 	<classpathentry kind="lib" path="packages/OwmClient.jar"/>
 	<classpathentry kind="lib" path="packages/wunderground-core-1.0.8-jar-with-dependencies.jar"/>
 	<classpathentry kind="lib" path="packages/forecastio-lib-java.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

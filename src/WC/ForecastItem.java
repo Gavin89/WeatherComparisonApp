@@ -63,14 +63,5 @@ public class ForecastItem {
 		this.date = date;
 	}
 
-	public ForecastItem(String unixTime, Double temp, Double windspeed, String summary, String date) {
-		this.temp = temp;
-		this.windspeed = windspeed;
-		this.summary = summary;
-		this.unixTime = unixTime;
-		this.date = date;
-		// TODO Auto-generated constructor stub
-	}
-	
 	
 }

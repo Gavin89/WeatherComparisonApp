@@ -30,15 +30,14 @@ public class Forecastio extends WeatherSource {
 		//System.out.println(fio.getTime());
 
 		try {
-			JSONObject json = new JSONObject(readUrl("https://api.forecast.io/forecast/cc450ce1a780afa5207fd28ea384c27b/" + location.getLongitude() + "," + this.getLatitude()));
+			JSONObject json = new JSONObject(readUrl("https://api.forecast.io/forecast/cc450ce1a780afa5207fd28ea384c27b/" + location.getLatitude() + "," + this.getLongitude()));
 
 			JSONObject hourly = json.getJSONObject("hourly");
 			JSONArray datas = hourly.getJSONArray("data");
 			for(int j = 0; j < datas.length(); j++){
 				JSONObject data = datas.getJSONObject(j);
 				//System.out.println(this.parseUnixDate(data.getLong("time")));
-
-				ForecastItem item = new ForecastItem(this.parseUnixDate(data.getInt("time")), data.getDouble("temperature"), data.getDouble("windSpeed"), 
+				ForecastItem item = new ForecastItem((int) this.parseUnixDate(data.getInt("time")), this.getCelsiusTemp(data.getDouble("temperature")), this.getRoundedWindspeed(data.getDouble("windSpeed")), 
 						data.getString("summary"), this.getDate(data.getInt("time")));
 				this.addForecast(item);
 			}
@@ -76,14 +75,25 @@ public class Forecastio extends WeatherSource {
 	public String getName(){
 		return "ForecastIO";
 	}
+	
+	public double getRoundedWindspeed(double windspeed){
+		 
+		 if (windspeed - Math.floor(windspeed) >=0.5) { 
+			 double roundDown = Math.ceil(windspeed); 
+			 return roundDown;
+			 }else{ 
+			 double roundUp = Math.floor(windspeed); 
+			 return roundUp;
+			 } 
+	}
 
-	public String parseUnixDate(int unix_time){
+	public int parseUnixDate(int unix_time){
 
 		Date date = new Date(unix_time*1000L); // *1000 is to convert seconds to milliseconds
 		SimpleDateFormat sdf = new SimpleDateFormat("HH"); // the format of your date
 		sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 		String formattedDate = sdf.format(date);
-		return formattedDate;
+		return new Integer(formattedDate);
 	}
 
 	public String getDate(int unix_time){
@@ -93,5 +103,16 @@ public class Forecastio extends WeatherSource {
 		sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 		String formattedDate = sdf.format(date);
 		return formattedDate;
+	}
+	
+	public double getCelsiusTemp(double temp){
+		 double temperature = ((temp - 32)*5)/9;
+		 if (temperature - Math.floor(temperature) >=0.5) { 
+			 double roundDown = Math.ceil(temperature); 
+			 return roundDown;
+			 }else{ 
+			 double roundUp = Math.floor(temperature); 
+			 return roundUp;
+			 } 
 	}
 }
