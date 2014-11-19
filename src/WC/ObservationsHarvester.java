@@ -27,7 +27,7 @@ public class ObservationsHarvester {
 
 	private void collect() throws Exception{
 		try {
-			json = new JSONObject(readUrl("http://datapoint.metoffice.gov.uk/public/data/val/wxobs/all/json/all?res=hourly&time=" + this.getYesterdayDate() + "T18Z&key=cb3f0007-c6a0-4633-9166-7fbbc8e76c9f"));
+			json = new JSONObject(readUrl("http://datapoint.metoffice.gov.uk/public/data/val/wxobs/all/json/all?res=hourly&time=" + this.getYesterdayDate() + "T12Z&key=cb3f0007-c6a0-4633-9166-7fbbc8e76c9f"));
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

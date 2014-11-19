@@ -22,6 +22,7 @@ public class Forecastio extends WeatherSource {
 
 	public Forecastio(WeatherLocation location) throws Exception {
 		super(location);
+		System.out.println("I'm Here");
 
 		fio = new ForecastIO("cc450ce1a780afa5207fd28ea384c27b"); //instantiate the class with the API key. 
 		fio.setUnits(ForecastIO.UNITS_SI); //sets the units as SI - optional

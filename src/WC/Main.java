@@ -12,7 +12,7 @@ public class Main {
 			public void run() {
 			
 					try {
-						new ObservationsHarvester();
+						//new ObservationsHarvester();
 						new DataCollector();
 						
 					} catch (Exception e1) {
