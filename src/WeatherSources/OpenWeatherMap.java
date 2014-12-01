@@ -55,13 +55,6 @@ public class OpenWeatherMap extends  WeatherSource {
 //		return windSpeed;
 //	}
 
-	@Override
-	public WeatherLocation getLocation() {
-		// TODO Auto-generated method stub
-		
-		return null;
-	}
-
 
 	public String getName(){
 		return "Open Weather Map";

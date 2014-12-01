@@ -13,22 +13,12 @@ import org.json.JSONObject;
 import WC.ForecastItem;
 import WC.WeatherLocation;
 import WeatherSource.WeatherSource;
-import dme.forecastiolib.ForecastIO;
 
 public class Forecastio extends WeatherSource {
 
-	ForecastIO fio;
-	private JSONObject dataObj;
-
 	public Forecastio(WeatherLocation location) throws Exception {
 		super(location);
-		System.out.println("I'm Here");
-
-		fio = new ForecastIO("cc450ce1a780afa5207fd28ea384c27b"); //instantiate the class with the API key. 
-		fio.setUnits(ForecastIO.UNITS_SI); //sets the units as SI - optional
-
-		fio.getForecast(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));//sets the latitude and longitude - not optional
-		//System.out.println(fio.getTime());
+		//System.out.println("I'm Here");
 
 		try {
 			JSONObject json = new JSONObject(readUrl("https://api.forecast.io/forecast/cc450ce1a780afa5207fd28ea384c27b/" + location.getLatitude() + "," + this.getLongitude()));
@@ -65,12 +55,6 @@ public class Forecastio extends WeatherSource {
 			if (reader != null)
 				reader.close();
 		}
-	}
-
-	@Override
-	public WeatherLocation getLocation() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	public String getName(){

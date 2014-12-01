@@ -86,13 +86,6 @@ private static String readUrl(String urlString) throws Exception {
 		}
 	}
 
-@Override
-public WeatherLocation getLocation()  {
-		// TODO Auto-generated method stub
-		return null;
-
-	}
-
 public double getRoundedTemp(double temperature){
 	
 	 if (temperature - Math.floor(temperature) >=0.5) { 

@@ -6,7 +6,6 @@ import java.util.Iterator;
 import WeatherSource.WeatherSource;
 import WeatherSources.Forecastio;
 import WeatherSources.MetOffice;
-import WeatherSources.Observations;
 import WeatherSources.OpenWeatherMap;
 import WeatherSources.Wunderground;
 
@@ -20,7 +19,6 @@ public class WeatherSourcesProvider implements Iterable<WeatherSource> {
 		this.registerWeatherSource(new MetOffice(location));
 		//this.registerWeatherSource(new OpenWeatherMap(location));
 		//this.registerWeatherSource(new Wunderground(location));
-		//this.registerWeatherSource(new Observations(location));
 	}
 	
 	public WeatherSourcesProvider(WeatherLocation loc) throws Exception {

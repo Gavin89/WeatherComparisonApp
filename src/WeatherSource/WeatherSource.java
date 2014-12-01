@@ -27,12 +27,6 @@ public class WeatherSource implements IWeatherSource {
 	}
 
 	@Override
-	public WeatherLocation getLocation() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
 		return null;

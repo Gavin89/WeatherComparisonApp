@@ -28,12 +28,6 @@ public class Wunderground extends  WeatherSource{
 //		return 0;
 //	}
 
-	@Override
-	public WeatherLocation getLocation() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public String getName(){
 		return "Wunderground";
 	}

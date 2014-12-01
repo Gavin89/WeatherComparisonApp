@@ -6,10 +6,6 @@ import WC.WeatherLocation;
 
 
 public interface IWeatherSource {
-
-	
-	//Returns location from weather source
-	public WeatherLocation getLocation();
 		
 	//Returns name of the weather source
 	public String getName();

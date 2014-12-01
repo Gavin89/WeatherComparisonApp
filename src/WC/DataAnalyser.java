@@ -39,24 +39,20 @@ public class DataAnalyser {
 	public void getData() {
 
 		db = mongo.getDB("tempDB");
-		collection = db.getCollection("tempData1");
-		db1 = mongo.getDB("obsDB");
-		collection1 = db1.getCollection("pastData");
+		collection = db.getCollection("tempData");
 		BasicDBObject whereQuery = new BasicDBObject();
 		whereQuery.put("location_name", "Coleshill");
 		whereQuery.put("time", 18);
-		whereQuery.put("date", "12-11-2014");
+		//whereQuery.put("date", "12-11-2014");
 		DBCursor cursor = collection.find(whereQuery);
-		DBCursor cursor1 = collection1.find(whereQuery);
 		try {
+			
 			while(cursor.hasNext()) {
-				System.out.println(cursor.next());
+				DBObject result = (DBObject) collection.find(cursor.next());
+				System.out.println(result);
+				//System.out.println(cursor.next());
 				
 			}
-			while(cursor1.hasNext()){
-				System.out.println(cursor1.next());	  
-			}
-
 		} finally {
 			cursor.close();
 		}
