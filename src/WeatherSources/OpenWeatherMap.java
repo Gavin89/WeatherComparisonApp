@@ -24,7 +24,7 @@ public class OpenWeatherMap extends  WeatherSource {
 		try {
 			owmResponse = owm.currentWeatherAtCity(location.getLatitude().floatValue(), location.getLongitude().floatValue(), 1);
 	
-		} catch (IOException | JSONException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

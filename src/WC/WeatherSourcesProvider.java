@@ -25,7 +25,7 @@ public class WeatherSourcesProvider implements Iterable<WeatherSource> {
 		
 		this.location = loc;
 		
-		this.weatherSources = new ArrayList<>();
+		this.weatherSources = new ArrayList<WeatherSource>();
 		
 		this.registerSources();
 	}
