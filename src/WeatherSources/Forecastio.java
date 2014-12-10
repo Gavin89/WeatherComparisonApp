@@ -25,7 +25,7 @@ public class Forecastio extends WeatherSource {
 
 			JSONObject hourly = json.getJSONObject("hourly");
 			JSONArray datas = hourly.getJSONArray("data");
-			for(int j = 0; j < datas.length(); j++){
+			for(int j = 0; j <= 24; j++){
 				JSONObject data = datas.getJSONObject(j);
 				//System.out.println(this.parseUnixDate(data.getLong("time")));
 				ForecastItem item = new ForecastItem((int) this.parseUnixDate(data.getInt("time")), this.getCelsiusTemp(data.getDouble("temperature")), this.getRoundedWindspeed(data.getDouble("windSpeed")), 

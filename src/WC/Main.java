@@ -13,7 +13,7 @@ public class Main {
 //			public void run() {
 //
 //					try {
-//						new ObservationsHarvester();
+//						//new ObservationsHarvester();
 //						new DataCollector();
 //
 //					} catch (Exception e1) {
@@ -24,6 +24,6 @@ public class Main {
 //		}).start();
 
         DataAnalyser data = new DataAnalyser();
-        data.getData();
+        data.run();
 	}
 }

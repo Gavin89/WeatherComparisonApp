@@ -1,15 +1,22 @@
 package WC;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Timer;
 
 import WeatherSource.WeatherSource;
+
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
+import com.mongodb.MongoClient;
 
 public class DataCollector {
 	
 
 	private	LocationsProvider locProvider;
-	DataAnalyser data;
-	
+	private DBCollection collection;
+	private DB db;
+	private MongoClient mongo;
 	
 	public DataCollector() throws Exception {
 		
@@ -21,7 +28,6 @@ public class DataCollector {
 	private void collect() throws Exception {
 		long startTime = System.currentTimeMillis();
 
-		data = new DataAnalyser();
 		for (WeatherLocation loc : this.locProvider) {
 
 			//System.out.println("Getting data for location "+loc.getLocationName());
@@ -43,7 +49,7 @@ public class DataCollector {
 //					System.out.println("\t Summary: " + item.getSummary());
 //					System.out.println("");	
 					
-					data.populateTempDB(loc.getLocationName(), ws.getName(), item.getTime(), item.getTemp(), item.getWindspeed(), 
+					this.populateTempDB(loc.getLocationName(), ws.getName(), item.getTime(), item.getTemp(), item.getWindspeed(), 
 							item.getDate(), ws.getLongitude(), ws.getLatitude(), item.getSummary());
 					
 				}
@@ -74,6 +80,22 @@ public class DataCollector {
 		long endTime   = System.currentTimeMillis();
 		long totalTime = endTime - startTime;
 		System.out.println(totalTime);
+	}
+	
+	public void populateTempDB(String locationName, String sourceName, int time,
+			Double temp, Double windspeed, String date, Double longitude,
+			Double latitude, String summary) throws UnknownHostException{
+			mongo = new MongoClient("localhost",27017);
+			
+		    db = mongo.getDB("weatherDB");
+
+		// get a single collection
+		collection = db.getCollection("weatherData");
+		DBObject dbObject = new BasicDBObject("time", 9).append("weather_source", sourceName).append("location_name", locationName).append("temperature", temp)
+				.append("windspeed", windspeed).append("date",  date).append("latitude", latitude).append("longitude", longitude).append("summary", summary);
+		collection.insert(dbObject);
+		// TODO Auto-generated method stub
+	
 	}
 	
 }
