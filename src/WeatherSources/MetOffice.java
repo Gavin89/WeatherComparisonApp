@@ -31,7 +31,6 @@ public MetOffice(WeatherLocation location) {
 		try {		
 
 			WeatherLocation newLocation = MetOfficeLocationProvider.getSpecifiedLocation(location.getLocationName());	
-			//System.out.println("Location name: " + newLocation.getLocationName() + "Location id: " + newLocation.getLocationId());
 			String locationId = newLocation.getLocationId();
 
 			try {
@@ -52,10 +51,6 @@ public MetOffice(WeatherLocation location) {
 					this.addForecast(item);
 				}
 			}
-
-			//System.out.println(json);
-			//String temp = (String) json.get("title");
-
 			catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -104,8 +99,6 @@ public String parseDate(String value) throws ParseException{
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
 
 		return formatter.format(date);
-		//return date//simpleDateFormat.format(dateObj);
-
 	}
 
 public String parseTime(String value){
@@ -115,8 +108,6 @@ public String parseTime(String value){
 		String time = value.substring(posT + 1, value.length() - 1);
 
 		return time;
-
-
 	}
 
 public String getName(){

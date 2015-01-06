@@ -10,7 +10,6 @@ public class LocationForecastWSMap {
     public LocationForecastWSMap(String location) {
         this.map = new HashMap<String, ForecastEntry>();
         this.location = location;
-
     }
 
     public void add(String weather_source, ForecastEntry fe) {

@@ -18,16 +18,13 @@ public class Forecastio extends WeatherSource {
 
 	public Forecastio(WeatherLocation location) throws Exception {
 		super(location);
-		//System.out.println("I'm Here");
-
 		try {
 			JSONObject json = new JSONObject(readUrl("https://api.forecast.io/forecast/cc450ce1a780afa5207fd28ea384c27b/" + location.getLatitude() + "," + this.getLongitude()));
 
 			JSONObject hourly = json.getJSONObject("hourly");
 			JSONArray datas = hourly.getJSONArray("data");
-			for(int j = 0; j <= 24; j++){
+			for(int j = 0; j < 24; j++){
 				JSONObject data = datas.getJSONObject(j);
-				//System.out.println(this.parseUnixDate(data.getLong("time")));
 				ForecastItem item = new ForecastItem((int) this.parseUnixDate(data.getInt("time")), this.getCelsiusTemp(data.getDouble("temperature")), this.getRoundedWindspeed(data.getDouble("windSpeed")), 
 						data.getString("summary"), this.getDate(data.getInt("time")));
 				this.addForecast(item);

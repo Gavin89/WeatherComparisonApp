@@ -75,7 +75,4 @@ public class WeatherSource implements IWeatherSource {
 		// TODO Auto-generated method stub
 		return this.location.getLatitude();
 	}
-
-	
-	
 }

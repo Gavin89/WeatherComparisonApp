@@ -20,60 +20,69 @@ import com.mongodb.MongoClient;
 public class ObservationsHarvester {
 
 	private JSONObject json;
+	private MongoClient mongo;
+	private DB db;
 
 	public ObservationsHarvester()  throws Exception {
-		this.collect();
-	}
+		mongo = new MongoClient();
+		this.collect();	}
 
 	private void collect() throws Exception{
 
-		for(int j = 9; j <=18; j+=3){
-			json = new JSONObject(readUrl("http://datapoint.metoffice.gov.uk/public/data/val/wxobs/all/json/all?res=hourly&time=2014-12-09T" + j + "Z&key=cb3f0007-c6a0-4633-9166-7fbbc8e76c9f"));
-
-			MongoClient mongo = new MongoClient();
-			DB db = mongo.getDB("weatherDB");
-
-			// get a single collection
-			DBCollection collection = db.getCollection("weatherData");
-
-			JSONObject siteRep = json.getJSONObject("SiteRep");
-			JSONObject dv = siteRep.getJSONObject("DV");
-			JSONArray locationArr = dv.getJSONArray("Location");
-			for(int i = 0; i < locationArr.length(); i++){
-				String id = (String) locationArr.getJSONObject(i).get("i");
-				String latitude = (String) locationArr.getJSONObject(i).get("lat");
-				String longitude = (String) locationArr.getJSONObject(i).get("lon");
-				String name = (String) locationArr.getJSONObject(i).get("name");	
-				JSONObject period = locationArr.getJSONObject(i).getJSONObject("Period");
-				JSONObject rep = period.getJSONObject("Rep");
-				String date = (String) period.get("value");
-				String temperature = " ";
-				String windspeed = " ";
-				if(rep.has("T")){
-					temperature = (String) rep.get("T");
+		try {
+			System.out.println("Adding Observations to database");
+			for(int j = 9; j <=18; j+=3){
+				
+				json = new JSONObject(readUrl("http://datapoint.metoffice.gov.uk/public/data/val/wxobs/all/json/all?res=hourly&time=" + this.getYesterdayDate() + "T" + j + "Z&key=cb3f0007-c6a0-4633-9166-7fbbc8e76c9f"));
+				try{
+				db = mongo.getDB("weatherDB");
 				}
-
-				if(rep.has("S")){
-					windspeed = (String) rep.get("S");
+				catch (Exception e){
+					e.printStackTrace();
 				}
-				int time = Integer.parseInt(rep.getString("$"));
-				int newTime = time/60;	
-				System.out.println(this.words(name)); //name.charAt(0) + name.substring(1, name.length()).toLowerCase());
-				//only add locations to db if they have temp and windspeed
-				if(rep.has("T") && rep.has("S")){
+				
+				// get a single collection
+				DBCollection collection = db.getCollection("weatherData");
 
-					DBObject dbObject = new BasicDBObject("time", newTime).append("weather_source", "Observations").append("location_name", this.words(name)).append("id", id).append("temperature", temperature)
-							.append("windspeed", windspeed).append("date",  this.parseDate(date)).append("latitude", latitude).append("longitude", longitude);
-					collection.insert(dbObject);
-					System.out.println("Adding: "+name+"\n");
+				JSONObject siteRep = json.getJSONObject("SiteRep");
+				JSONObject dv = siteRep.getJSONObject("DV");
+				JSONArray locationArr = dv.getJSONArray("Location");
+				for(int i = 0; i < locationArr.length(); i++){
+					String id = (String) locationArr.getJSONObject(i).get("i");
+					String latitude = (String) locationArr.getJSONObject(i).get("lat");
+					String longitude = (String) locationArr.getJSONObject(i).get("lon");
+					String name = (String) locationArr.getJSONObject(i).get("name");	
+					JSONObject period = locationArr.getJSONObject(i).getJSONObject("Period");
+					JSONObject rep = period.getJSONObject("Rep");
+					String date = (String) period.get("value");
+					String temperature = " ";
+					String windspeed = " ";
+					if(rep.has("T")){
+						temperature = (String) rep.get("T");
+					}
+					if(rep.has("S")){
+						windspeed = (String) rep.get("S");
+					}
+					int time = Integer.parseInt(rep.getString("$"));
+					int newTime = time/60;	
 
-				}
-				else {
+					//only add locations to db if they have temp and windspeed
+					if(rep.has("T") && rep.has("S")){
 
+						DBObject dbObject = new BasicDBObject("time", newTime).append("weather_source", "Observations").append("location_name", this.words(name)).append("id", id).append("temperature", temperature)
+								.append("windspeed", windspeed).append("date",  this.parseDate(date)).append("latitude", latitude).append("longitude", longitude);
+						collection.insert(dbObject);						
+					}
+					else {
+					}
 				}
 			}
+			System.out.println("Observations added Successfully");
+		} 
+		catch (Exception e){
+			e.printStackTrace();
 		}
-		}
+	}
 
 	public String words(String word){
 
@@ -126,8 +135,6 @@ public class ObservationsHarvester {
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
 
 		return formatter.format(date);
-		//return date//simpleDateFormat.format(dateObj);
-
 	}
 
 	public String getYesterdayDate() {
@@ -138,9 +145,7 @@ public class ObservationsHarvester {
 		Date yesterday = cal.getTime();
 		SimpleDateFormat formatter5=new SimpleDateFormat("yyyy-MM-dd");
 		String formats1 = formatter5.format(yesterday);
-		System.out.println(yesterday);
+		//System.out.println(yesterday);
 		return formats1;
 	}
-
-
 }

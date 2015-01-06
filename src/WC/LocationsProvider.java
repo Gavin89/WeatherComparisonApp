@@ -10,21 +10,22 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
-import com.mongodb.util.JSON;
 
 public class LocationsProvider implements Iterable<WeatherLocation> {
 
 	private HashMap<String, WeatherLocation> locations;
+	private DB db;
 
 	public LocationsProvider() throws UnknownHostException {
+		System.out.println("Connecting to MongoDB to collect locations");
+		db = (new MongoClient("localhost",27017)).getDB("locations");
 		this.locations = new HashMap<String, WeatherLocation>();
-
 		this.populateLocations();
 	}
 
 	private void populateLocations() throws UnknownHostException {
 
-		DB db = (new MongoClient("localhost",27017)).getDB("locations");
+		
 		DBCollection collection = db.getCollection("locations");
 		BasicDBObject object = new BasicDBObject();
 		DBCursor cur = collection.find(object);
@@ -48,7 +49,4 @@ public class LocationsProvider implements Iterable<WeatherLocation> {
 		// TODO Auto-generated method stub
 		return this.locations.values().iterator();
 	}
-
-
-
 }

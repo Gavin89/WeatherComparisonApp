@@ -2,9 +2,6 @@ package WeatherSource;
 
 import java.util.Date;
 
-import WC.WeatherLocation;
-
-
 public interface IWeatherSource {
 		
 	//Returns name of the weather source

@@ -10,24 +10,6 @@ public class Wunderground extends  WeatherSource{
 		// TODO Auto-generated constructor stub
 	}
 
-//	@Override
-//	public Double getTemp() {
-//		// TODO Auto-generated method stub
-//		return 0.0;
-//	}
-//
-//	@Override
-//	public String getSummary() {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-//
-//	@Override
-//	public double getWindSpeed() {
-//		// TODO Auto-generated method stub
-//		return 0;
-//	}
-
 	public String getName(){
 		return "Wunderground";
 	}
