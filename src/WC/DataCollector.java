@@ -34,19 +34,24 @@ public class DataCollector {
 	
 	private void collect() throws Exception {
 
+		System.out.println("Populating database");
 		for (WeatherLocation loc : this.locProvider) {
 
 			WeatherSourcesProvider wsProvider = new WeatherSourcesProvider(loc);
 			
 			for (WeatherSource ws : wsProvider) {
+				//System.out.println("Getting forecasts from: " + ws.getName());
 				ArrayList<ForecastItem> items = ws.getForecasts();
+				//System.out.println("Populating Database with data from: " + ws.getName());
 				for(ForecastItem item : items){
 					
 					this.populateTempDB(loc.getLocationName(), ws.getName(), item.getTime(), item.getTemp(), item.getWindspeed(), 
 							item.getDate(), ws.getLongitude(), ws.getLatitude(), item.getSummary());				
-				}				
+				}	
+				//System.out.println("Database successfully updated from source: " + ws.getName());
 			}			
 		}
+		System.out.println("Database successfully populated");
 	}
 	
 	public void populateTempDB(String locationName, String sourceName, int time,

@@ -14,7 +14,6 @@ public class Main {
 				public void run() {
 
 					try {
-						System.out.println("Collecting Data");
 						new ObservationsHarvester();
 						new DataCollector();
 
