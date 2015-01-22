@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.mongodb.BasicDBObject;
@@ -53,7 +54,21 @@ public class ObservationsHarvester {
 					String longitude = (String) locationArr.getJSONObject(i).get("lon");
 					String name = (String) locationArr.getJSONObject(i).get("name");	
 					JSONObject period = locationArr.getJSONObject(i).getJSONObject("Period");
-					JSONObject rep = period.getJSONObject("Rep");
+					JSONObject rep = null;
+					
+					try {
+					if (period.has("Period")) {	
+						JSONObject period2 = period.getJSONObject("Period");
+						rep = period2.getJSONObject("Rep");
+					} else {
+						rep = period.getJSONObject("Rep");
+					}
+					} catch (JSONException e) {
+						System.out.println(locationArr.getJSONObject(i).toString());
+					}
+					
+				
+					
 					String date = (String) period.get("value");
 					String temperature = " ";
 					String windspeed = " ";
