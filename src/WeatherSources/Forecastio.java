@@ -122,15 +122,4 @@ public class Forecastio extends WeatherSource {
 		return formats1;
 	}
 	
-	public String getParsedDate() {
-		java.util.Date  now = new Date();
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(now);	
-		cal.add(Calendar.DAY_OF_YEAR, 0);
-		Date tomorrow = cal.getTime();
-		SimpleDateFormat formatter5=new SimpleDateFormat("dd-MM-yyyy");
-		String formats1 = formatter5.format(tomorrow);
-		
-		return formats1;
-	}
 }

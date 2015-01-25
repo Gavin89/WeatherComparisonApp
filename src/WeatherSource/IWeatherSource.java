@@ -19,5 +19,9 @@ public interface IWeatherSource {
 	//Returns tomorrows date
 	public String getTomorrowDate();
 
+	//Returns tomorrows date parsed
 	public String getTomorrowParsedDate();
+
+	//Returns current date parsed
+	public String getParsedDate();
 }

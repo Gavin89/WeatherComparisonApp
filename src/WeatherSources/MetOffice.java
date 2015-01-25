@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import WC.ForecastItem;
@@ -20,35 +21,38 @@ import WeatherSource.WeatherSource;
 
 public class MetOffice extends  WeatherSource{
 
-private HashMap<String, String> summaryList;
+	private HashMap<String, String> summaryList;
 
-public MetOffice(WeatherLocation location) {
+	public MetOffice(WeatherLocation location) {
 
-	super(location);
-	summaryList = new HashMap<String, String>();
+		super(location);
+		summaryList = new HashMap<String, String>();
 
-	this.summaryList();
+		this.summaryList();
 		try {		
 
 			WeatherLocation newLocation = MetOfficeLocationProvider.getSpecifiedLocation(location.getLocationName());	
 			String locationId = newLocation.getLocationId();
 
 			try {
-				for(int i = 0; i < 48; i+=3){
-					JSONObject json = new JSONObject(readUrl("http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/" + locationId + "?res=3hourly&time=" + this.getTomorrowDate() + "T" + i + "Z&key=cb3f0007-c6a0-4633-9166-7fbbc8e76c9f"));
+				JSONObject json = new JSONObject(readUrl("http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/" + locationId + "?res=3hourly&key=cb3f0007-c6a0-4633-9166-7fbbc8e76c9f"));
 
-					JSONObject siteRep = json.getJSONObject("SiteRep");
-					JSONObject dv = siteRep.getJSONObject("DV");
-					JSONObject locationObj = dv.getJSONObject("Location");
-					JSONObject periods = locationObj.getJSONObject("Period");
-					JSONObject rep = periods.getJSONObject("Rep");
+				JSONObject siteRep = json.getJSONObject("SiteRep");
+				JSONObject dv = siteRep.getJSONObject("DV");
+				JSONObject locationObj = dv.getJSONObject("Location");
+				JSONArray periods = locationObj.getJSONArray("Period");
+				for(int i = 0; i < 5; i ++){
+					JSONObject value = periods.getJSONObject(i);
+					JSONArray rep = value.getJSONArray("Rep");
+					for(int j = 0; j < rep.length(); j++){
 
-					int time = Integer.parseInt(rep.getString("$"));
-					int newTime = time/60;
+						int time = Integer.parseInt(rep.getString("$"));
+						int newTime = time/60;
+						ForecastItem item = new ForecastItem(newTime, rep.getDouble("T"), rep.getDouble("S"), 
+								summaryList.get(rep.getString("W")),this.parseDate(rep.getString("value")),i);
 
-					ForecastItem item = new ForecastItem(newTime, rep.getDouble("T"), rep.getDouble("S"), 
-							summaryList.get(rep.getString("W")),this.parseDate(periods.getString("value")),j);
-					this.addForecast(item);
+						this.addForecast(item);
+					}
 				}
 			}
 			catch (Exception e) {
@@ -63,7 +67,7 @@ public MetOffice(WeatherLocation location) {
 		// TODO Auto-generated constructor stub
 	}
 
-private static String readUrl(String urlString) throws Exception {
+	private static String readUrl(String urlString) throws Exception {
 		BufferedReader reader = null;
 		try {
 			URL url = new URL(urlString);
@@ -81,18 +85,18 @@ private static String readUrl(String urlString) throws Exception {
 		}
 	}
 
-public double getRoundedTemp(double temperature){
-	
-	 if (temperature - Math.floor(temperature) >=0.5) { 
-		 double roundDown = Math.ceil(temperature); 
-		 return roundDown;
-		 }else{ 
-		 double roundUp = Math.floor(temperature); 
-		 return roundUp;
-		 } 
-}
+	public double getRoundedTemp(double temperature){
 
-public String parseDate(String value) throws ParseException{
+		if (temperature - Math.floor(temperature) >=0.5) { 
+			double roundDown = Math.ceil(temperature); 
+			return roundDown;
+		}else{ 
+			double roundUp = Math.floor(temperature); 
+			return roundUp;
+		} 
+	}
+
+	public String parseDate(String value) throws ParseException{
 
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = simpleDateFormat.parse(value);
@@ -101,7 +105,7 @@ public String parseDate(String value) throws ParseException{
 		return formatter.format(date);
 	}
 
-public String parseTime(String value){
+	public String parseTime(String value){
 
 		int posT = value.indexOf('T');
 
@@ -110,11 +114,11 @@ public String parseTime(String value){
 		return time;
 	}
 
-public String getName(){
+	public String getName(){
 		return "MettOffice";
 	}
 
-public void summaryList() {
+	public void summaryList() {
 
 		summaryList.put("NA", "Not available");
 		summaryList.put("0", "Clear night");
