@@ -34,7 +34,7 @@ public MetOffice(WeatherLocation location) {
 			String locationId = newLocation.getLocationId();
 
 			try {
-				for(int i = 0; i < 24; i+=3){
+				for(int i = 0; i < 48; i+=3){
 					JSONObject json = new JSONObject(readUrl("http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/" + locationId + "?res=3hourly&time=" + this.getTomorrowDate() + "T" + i + "Z&key=cb3f0007-c6a0-4633-9166-7fbbc8e76c9f"));
 
 					JSONObject siteRep = json.getJSONObject("SiteRep");
@@ -47,7 +47,7 @@ public MetOffice(WeatherLocation location) {
 					int newTime = time/60;
 
 					ForecastItem item = new ForecastItem(newTime, rep.getDouble("T"), rep.getDouble("S"), 
-							summaryList.get(rep.getString("W")),this.parseDate(periods.getString("value")));
+							summaryList.get(rep.getString("W")),this.parseDate(periods.getString("value")),j);
 					this.addForecast(item);
 				}
 			}

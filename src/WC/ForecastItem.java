@@ -7,6 +7,7 @@ public class ForecastItem {
 	private int time;
 	private String unixTime;
 	private String date;
+	private int leadTime;
 
 	public String getDate(){
 		return date;
@@ -16,6 +17,13 @@ public class ForecastItem {
 		return this.date = date;
 	}
 	
+	public int getLeadTime(){
+		return leadTime;
+	}
+	
+	public int setLeadTime(int leadTime){
+		return this.leadTime = leadTime;
+	}
 	public Double getTemp() {
 		return temp;
 	}
@@ -55,12 +63,13 @@ public class ForecastItem {
 
 	private String summary;
 	
-	public ForecastItem(int time, Double temp, Double windspeed, String summary, String date) {
+	public ForecastItem(int time, Double temp, Double windspeed, String summary, String date, int leadTime) {
 		this.temp = temp;
 		this.windspeed = windspeed;
 		this.summary = summary;
 		this.time = time;
 		this.date = date;
+		this.leadTime = leadTime;
 	}
 
 	

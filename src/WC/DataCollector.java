@@ -46,7 +46,7 @@ public class DataCollector {
 				for(ForecastItem item : items){
 					
 					this.populateTempDB(loc.getLocationName(), ws.getName(), item.getTime(), item.getTemp(), item.getWindspeed(), 
-							item.getDate(), ws.getLongitude(), ws.getLatitude(), item.getSummary());				
+							item.getDate(), ws.getLongitude(), ws.getLatitude(), item.getSummary(), item.getLeadTime());				
 				}	
 				//System.out.println("Database successfully updated from source: " + ws.getName());
 			}			
@@ -56,14 +56,14 @@ public class DataCollector {
 	
 	public void populateTempDB(String locationName, String sourceName, int time,
 			Double temp, Double windspeed, String date, Double longitude,
-			Double latitude, String summary) throws UnknownHostException{
+			Double latitude, String summary, int leadTime) throws UnknownHostException{
 			
 		    db = mongo.getDB("weatherDB");
 
 		// get a single collection
 		collection = db.getCollection("weatherData");
 		DBObject dbObject = new BasicDBObject("time", time).append("weather_source", sourceName).append("location_name", locationName).append("temperature", temp)
-				.append("windspeed", windspeed).append("date",  date).append("latitude", latitude).append("longitude", longitude).append("summary", summary);
+				.append("windspeed", windspeed).append("date",  date).append("latitude", latitude).append("longitude", longitude).append("summary", summary).append("lead_time",  leadTime);
 		collection.insert(dbObject);
 		// TODO Auto-generated method stub
 	

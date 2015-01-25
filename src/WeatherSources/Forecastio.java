@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -23,11 +24,21 @@ public class Forecastio extends WeatherSource {
 
 			JSONObject hourly = json.getJSONObject("hourly");
 			JSONArray datas = hourly.getJSONArray("data");
-			for(int j = 0; j < 24; j++){
-				JSONObject data = datas.getJSONObject(j);
-				ForecastItem item = new ForecastItem((int) this.parseUnixDate(data.getInt("time")), this.getCelsiusTemp(data.getDouble("temperature")), this.getRoundedWindspeed(data.getDouble("windSpeed")), 
-						data.getString("summary"), this.getDate(data.getInt("time")));
+			ForecastItem item = null;
+			for(int i = 0; i < 48; i++){
+				
+				JSONObject data = datas.getJSONObject(i);
+				if(this.getDate(data.getInt("time")).equals(this.getParsedDate())){
+					item = new ForecastItem((int) this.parseUnixDate(data.getInt("time")), this.getCelsiusTemp(data.getDouble("temperature")), this.getRoundedWindspeed(data.getDouble("windSpeed")), 
+							data.getString("summary"), this.getDate(data.getInt("time")),0);
+				}
+				else {
+					item = new ForecastItem((int) this.parseUnixDate(data.getInt("time")), this.getCelsiusTemp(data.getDouble("temperature")), this.getRoundedWindspeed(data.getDouble("windSpeed")), 
+							data.getString("summary"), this.getDate(data.getInt("time")),1);
+				}
+
 				this.addForecast(item);
+				
 			}
 		}
 		catch (Exception e){
@@ -96,5 +107,30 @@ public class Forecastio extends WeatherSource {
 			 double roundUp = Math.floor(temperature); 
 			 return roundUp;
 			 } 
+	}
+	
+	@Override
+	public String getTomorrowParsedDate() {
+		java.util.Date  now = new Date();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(now);	
+		cal.add(Calendar.DAY_OF_YEAR, 1);
+		Date tomorrow = cal.getTime();
+		SimpleDateFormat formatter5=new SimpleDateFormat("dd-MM-yyyy");
+		String formats1 = formatter5.format(tomorrow);
+		
+		return formats1;
+	}
+	
+	public String getParsedDate() {
+		java.util.Date  now = new Date();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(now);	
+		cal.add(Calendar.DAY_OF_YEAR, 0);
+		Date tomorrow = cal.getTime();
+		SimpleDateFormat formatter5=new SimpleDateFormat("dd-MM-yyyy");
+		String formats1 = formatter5.format(tomorrow);
+		
+		return formats1;
 	}
 }

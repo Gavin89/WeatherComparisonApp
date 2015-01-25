@@ -14,7 +14,7 @@ public class WeatherSourcesProvider implements Iterable<WeatherSource> {
 	
 	private void registerSources() throws Exception {
 		this.registerWeatherSource(new Forecastio(location));
-		this.registerWeatherSource(new MetOffice(location));
+		//this.registerWeatherSource(new MetOffice(location));
 		//this.registerWeatherSource(new OpenWeatherMap(location));
 		//this.registerWeatherSource(new Wunderground(location));
 	}
