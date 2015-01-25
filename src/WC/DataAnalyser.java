@@ -28,13 +28,14 @@ public class DataAnalyser {
 
 
 	public LocationForecastWSMap getWeatherSourcesByLocationName(String locName, int time, String date) {
-		db = mongo.getDB("tempDB");
-		collection = db.getCollection("tempData");
+		db = mongo.getDB("weatherDB");
+		collection = db.getCollection("weatherData");
 		BasicDBObject whereQuery = new BasicDBObject();
 		whereQuery.put("location_name", locName);
 		whereQuery.put("time", time);
 		whereQuery.put("date", date);
 		DBCursor cursor = collection.find(whereQuery);
+		//System.out.println(cursor.toString());
 		LocationForecastWSMap entries = new LocationForecastWSMap(locName);
 
 		try {
@@ -60,7 +61,7 @@ public class DataAnalyser {
 
 				entries.add(weather_source, fe);
 
-				System.out.println("WS: "+weather_source+", Date: "+date+", Time: "+time+", Temperature: "+temperature);
+				//System.out.println("WS: "+weather_source+", Date: "+date+", Time: "+time+", Temperature: "+temperature);
 
 			}
 		} finally {
@@ -90,7 +91,7 @@ public class DataAnalyser {
 		ArrayList<ForecastEntry> forecastio_fe = new ArrayList<ForecastEntry>();
 		ArrayList<ForecastEntry> observations_fe = new ArrayList<ForecastEntry>();
 
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 		Calendar cal = Calendar.getInstance();
 		Date date1 = cal.getTime();
 		String reportDate = sdf.format(date1);
@@ -98,26 +99,30 @@ public class DataAnalyser {
 			cal.add(Calendar.DAY_OF_MONTH, -1);
 			date1 = cal.getTime();
 			reportDate = sdf.format(date1);
-			System.out.println(reportDate);
+			//System.out.println(reportDate);
 			for (int time = 9; time <= 18; time += 3) {
-				LocationForecastWSMap forecasts = this.getWeatherSourcesByLocationName(name, time, String.valueOf(date));
+				LocationForecastWSMap forecasts = this.getWeatherSourcesByLocationName(name, time, String.valueOf(reportDate));
 				metoffice_fe.add(forecasts.get("MettOffice"));
 				forecastio_fe.add(forecasts.get("ForecastIO"));
 				observations_fe.add(forecasts.get("Observations"));
-				System.out.println(time);
+				//System.out.println(time);
 			}
 		}
 
 		WSErrors metoffice_err;
+		WSErrors forecastio_err;
 		try {
 			metoffice_err = calculateErrorByWeatherSource(metoffice_fe, observations_fe);
-			WSErrors forecastio_err = calculateErrorByWeatherSource(forecastio_fe, observations_fe);
+			forecastio_err = calculateErrorByWeatherSource(forecastio_fe, observations_fe);
+			System.out.println("Getting Calulations for " + name);
 			System.out.println("Metoffice Bias: "+metoffice_err.calculateBias());
 			System.out.println("Metoffice RMSE: "+metoffice_err.calculateRMSE());
 			System.out.println("ForecastIO Bias: "+forecastio_err.calculateBias());
 			System.out.println("ForecastIO RMSE: "+forecastio_err.calculateRMSE());
+			System.out.println("\n");
 		} catch (Exception e) {
 			System.out.println("Skipping "+name+". "+e.getMessage()); 
+			System.out.println("\n");
 		}
 
 	}
