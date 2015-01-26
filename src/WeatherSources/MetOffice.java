@@ -45,11 +45,11 @@ public class MetOffice extends  WeatherSource{
 					JSONObject value = periods.getJSONObject(i);
 					JSONArray rep = value.getJSONArray("Rep");
 					for(int j = 0; j < rep.length(); j++){
-
-						int time = Integer.parseInt(rep.getString("$"));
+						JSONObject repObj = rep.getJSONObject(j);
+						int time = Integer.parseInt(repObj.getString("$"));
 						int newTime = time/60;
-						ForecastItem item = new ForecastItem(newTime, rep.getDouble("T"), rep.getDouble("S"), 
-								summaryList.get(rep.getString("W")),this.parseDate(rep.getString("value")),i);
+						ForecastItem item = new ForecastItem(newTime, repObj.getDouble("T"), repObj.getDouble("S"), 
+								summaryList.get(repObj.getString("W")),this.parseDate(value.getString("value")),i);
 
 						this.addForecast(item);
 					}
