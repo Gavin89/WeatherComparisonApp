@@ -18,5 +18,8 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="packages/slf4j-api-1.7.10.jar"/>
 	<classpathentry kind="lib" path="packages/slf4j-simple-1.7.10.jar"/>
+	<classpathentry kind="lib" path="packages/cucumber-java-1.2.2.jar"/>
+	<classpathentry kind="lib" path="packages/cucumber-java-1.2.2-sources.jar"/>
+	<classpathentry kind="lib" path="packages/cucumber-junit-1.2.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
