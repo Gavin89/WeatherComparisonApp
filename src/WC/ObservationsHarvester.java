@@ -21,11 +21,9 @@ import com.mongodb.MongoClient;
 public class ObservationsHarvester {
 
 	private JSONObject json;
-	private MongoClient mongo;
 	private DB db;
 
 	public ObservationsHarvester()  throws Exception {
-		mongo = new MongoClient();
 		this.collect();	}
 
 	private void collect() throws Exception{
@@ -36,7 +34,7 @@ public class ObservationsHarvester {
 				
 				json = new JSONObject(readUrl("http://datapoint.metoffice.gov.uk/public/data/val/wxobs/all/json/all?res=hourly&time=" + this.getYesterdayDate() + "T" + j + "Z&key=cb3f0007-c6a0-4633-9166-7fbbc8e76c9f"));
 				try{
-				db = mongo.getDB("weatherDB");
+				db = MongoDB.getMongoInstance().getDB("weatherDB");
 				}
 				catch (Exception e){
 					e.printStackTrace();
@@ -66,9 +64,7 @@ public class ObservationsHarvester {
 					} catch (JSONException e) {
 						System.out.println(locationArr.getJSONObject(i).toString());
 					}
-					
-				
-					
+									
 					String date = (String) period.get("value");
 					String temperature = " ";
 					String windspeed = " ";

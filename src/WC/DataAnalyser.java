@@ -6,29 +6,27 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
-import com.mongodb.MongoClient;
 
 public class DataAnalyser {
-	private MongoClient mongo;
 	private DBCollection collection;
 	private DB db;
-	public DataAnalyser () {
-		try {
-			mongo = new MongoClient();
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public DataAnalyser () throws UnknownHostException {
+	    Logger logger = LoggerFactory.getLogger(DataAnalyser.class);
+	    logger.info("Analysing the Data");
+		MongoDB.getMongoInstance();
 	}
 
 
 	public LocationForecastWSMap getWeatherSourcesByLocationName(String locName, int time, String date) {
-		db = mongo.getDB("weatherDB");
+		db = MongoDB.getMongoInstance().getDB("weatherDB");
 		collection = db.getCollection("weatherData");
 		BasicDBObject whereQuery = new BasicDBObject();
 		whereQuery.put("location_name", locName);
@@ -129,7 +127,7 @@ public class DataAnalyser {
 
 	public void run() throws UnknownHostException {
 
-		DB db1 = (new MongoClient("localhost",27017)).getDB("locations");
+		DB db1 = MongoDB.getMongoInstance().getDB("locations");
 		DBCollection collection1 = db1.getCollection("locations");
 		BasicDBObject object = new BasicDBObject();
 		DBCursor cur = collection1.find(object);
