@@ -4,21 +4,29 @@ import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
-import com.mongodb.MongoClient;
 
 public class LocationsProvider implements Iterable<WeatherLocation> {
 
 	private HashMap<String, WeatherLocation> locations;
 	private DB db;
+	private Logger logger;
+	private DBCollection collection;
+	private BasicDBObject object;
+	private DBCursor cur;
 
 	public LocationsProvider() throws UnknownHostException {
-		System.out.println("Connecting to MongoDB to collect locations");
-		db = (new MongoClient("localhost",27017)).getDB("locations");
+	    logger = LoggerFactory.getLogger(DataCollector.class);
+	    logger.info("Collecting locations");
+	    
+		db = MongoDB.getMongoInstance().getDB("locations");
 		this.locations = new HashMap<String, WeatherLocation>();
 		this.populateLocations();
 	}
@@ -26,9 +34,9 @@ public class LocationsProvider implements Iterable<WeatherLocation> {
 	private void populateLocations() throws UnknownHostException {
 
 		
-		DBCollection collection = db.getCollection("locations");
-		BasicDBObject object = new BasicDBObject();
-		DBCursor cur = collection.find(object);
+		collection = db.getCollection("locations");
+		object = new BasicDBObject();
+		cur = collection.find(object);
 		while(cur.hasNext()){
 			DBObject resultElement = null;
 			resultElement = cur.next();
