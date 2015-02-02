@@ -23,7 +23,8 @@ public class LocationsProvider implements Iterable<WeatherLocation> {
 	private DBCursor cur;
 
 	public LocationsProvider() throws UnknownHostException {
-	    logger = LoggerFactory.getLogger(DataCollector.class);
+	    logger = LoggerFactory.getLogger(LocationsProvider.class);
+	    
 	    logger.info("Collecting locations");
 	    
 		db = MongoDB.getMongoInstance().getDB("locations");
@@ -46,6 +47,7 @@ public class LocationsProvider implements Iterable<WeatherLocation> {
 			String locationId = null;	
 			this.locations.put(locationName, new WeatherLocation(locationName, Double.parseDouble(longitude), Double.parseDouble(latitude), locationId));	
 		}
+		logger.info("Locations Collected");
 	}
 
 	public WeatherLocation getLocationByName(String name) {
