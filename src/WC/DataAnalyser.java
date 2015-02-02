@@ -27,15 +27,13 @@ public class DataAnalyser {
 	}
 
 
-	public LocationForecastWSMap getWeatherSourcesByLocationName(String locName, int time, String date, int leadTime) {
-
+	public LocationForecastWSMap getWeatherSourcesByLocationName(String locName, int time, String date) {
 		db = mongo.getDB("weatherDB");
 		collection = db.getCollection("weatherData");
 		BasicDBObject whereQuery = new BasicDBObject();
 		whereQuery.put("location_name", locName);
 		whereQuery.put("time", time);
 		whereQuery.put("date", date);
-		whereQuery.put("lead_time", leadTime);
 		DBCursor cursor = collection.find(whereQuery);
 		//System.out.println(cursor.toString());
 		LocationForecastWSMap entries = new LocationForecastWSMap(locName);
@@ -102,14 +100,12 @@ public class DataAnalyser {
 			date1 = cal.getTime();
 			reportDate = sdf.format(date1);
 			//System.out.println(reportDate);
-			for (int leadTime = 0; leadTime < 2; leadTime++){
-				for (int time = 9; time <= 18; time += 3) {
-					LocationForecastWSMap forecasts = this.getWeatherSourcesByLocationName(name, time, String.valueOf(reportDate), leadTime);
-					metoffice_fe.add(forecasts.get("MettOffice"));
-					forecastio_fe.add(forecasts.get("ForecastIO"));
-					observations_fe.add(forecasts.get("Observations"));
-					//System.out.println(time);
-				}
+			for (int time = 9; time <= 18; time += 3) {
+				LocationForecastWSMap forecasts = this.getWeatherSourcesByLocationName(name, time, String.valueOf(reportDate));
+				metoffice_fe.add(forecasts.get("MettOffice"));
+				forecastio_fe.add(forecasts.get("ForecastIO"));
+				observations_fe.add(forecasts.get("Observations"));
+				//System.out.println(time);
 			}
 		}
 
