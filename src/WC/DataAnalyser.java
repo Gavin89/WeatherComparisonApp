@@ -14,22 +14,12 @@ import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 
 public class DataAnalyser {
-	private MongoClient mongo;
 	private DBCollection collection;
 	private DB db;
-	public DataAnalyser () {
-		try {
-			mongo = new MongoClient();
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-
+	
 	public LocationForecastWSMap getWeatherSourcesByLocationName(String locName, int time, String date, int leadTime) {
 
-		db = mongo.getDB("weatherDB");
+		db = MongoDB.getMongoInstance().getDB("weatherDB");
 		collection = db.getCollection("weatherData");
 		BasicDBObject whereQuery = new BasicDBObject();
 		whereQuery.put("location_name", locName);
@@ -133,7 +123,7 @@ public class DataAnalyser {
 
 	public void run() throws UnknownHostException {
 
-		DB db1 = (new MongoClient("localhost",27017)).getDB("locations");
+		DB db1 = MongoDB.getMongoInstance().getDB("locations");
 		DBCollection collection1 = db1.getCollection("locations");
 		BasicDBObject object = new BasicDBObject();
 		DBCursor cur = collection1.find(object);

@@ -8,6 +8,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,20 +19,21 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
-import com.mongodb.MongoClient;
 
 public class ObservationsHarvester {
 
 	private JSONObject json;
 	private DB db;
+	private Logger logger;
 
 	public ObservationsHarvester()  throws Exception {
+		logger = LoggerFactory.getLogger(ObservationsHarvester.class);
 		this.collect();	}
 
 	private void collect() throws Exception{
 
 		try {
-			System.out.println("Adding Observations to database");
+			logger.info("Adding Observations to database");
 			for(int j = 9; j <=18; j+=3){
 				
 				json = new JSONObject(readUrl("http://datapoint.metoffice.gov.uk/public/data/val/wxobs/all/json/all?res=hourly&time=" + this.getYesterdayDate() + "T" + j + "Z&key=cb3f0007-c6a0-4633-9166-7fbbc8e76c9f"));
@@ -39,7 +43,7 @@ public class ObservationsHarvester {
 				catch (Exception e){
 					e.printStackTrace();
 				}
-				
+								
 				// get a single collection
 				DBCollection collection = db.getCollection("weatherData");
 
@@ -92,6 +96,7 @@ public class ObservationsHarvester {
 		} 
 		catch (Exception e){
 			e.printStackTrace();
+			logger.error("Unable to populate observations", json.toString());
 		}
 	}
 
@@ -156,7 +161,7 @@ public class ObservationsHarvester {
 		Date yesterday = cal.getTime();
 		SimpleDateFormat formatter5=new SimpleDateFormat("yyyy-MM-dd");
 		String formats1 = formatter5.format(yesterday);
-		//System.out.println(yesterday);
+			
 		return formats1;
 	}
 }
