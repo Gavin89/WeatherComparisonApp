@@ -15,19 +15,22 @@ import com.mongodb.MongoClient;
 
 public class DataAnalyser {
 	private DBCollection collection;
+	private DBCollection collection1;
 	private DB db;
+	private String weather_source;
+	private String reportDate;
 	
 	public LocationForecastWSMap getWeatherSourcesByLocationName(String locName, int time, String date, int leadTime) {
 
 		db = MongoDB.getMongoInstance().getDB("weatherDB");
 		collection = db.getCollection("weatherData");
+		collection1 = db.getCollection("weatherCalculations");
 		BasicDBObject whereQuery = new BasicDBObject();
 		whereQuery.put("location_name", locName);
 		whereQuery.put("time", time);
 		whereQuery.put("date", date);
 		whereQuery.put("lead_time", leadTime);
 		DBCursor cursor = collection.find(whereQuery);
-		//System.out.println(cursor.toString());
 		LocationForecastWSMap entries = new LocationForecastWSMap(locName);
 
 		try {
@@ -42,7 +45,7 @@ public class DataAnalyser {
 				WeatherLocation location = new WeatherLocation(locName, Double.parseDouble(lat) ,
 						Double.parseDouble(lng), "");
 
-				String weather_source = (String) obj.get("weather_source");
+				weather_source = (String) obj.get("weather_source");
 
 				String temperature = obj.get("temperature").toString();
 
@@ -52,14 +55,10 @@ public class DataAnalyser {
 						Double.parseDouble(windspeed), obj.get("date").toString(), weather_source);
 
 				entries.add(weather_source, fe);
-
-				//System.out.println("WS: "+weather_source+", Date: "+date+", Time: "+time+", Temperature: "+temperature);
-
 			}
 		} finally {
 			cursor.close();
 		}
-
 		return entries;
 	}
 
@@ -86,34 +85,36 @@ public class DataAnalyser {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 		Calendar cal = Calendar.getInstance();
 		Date date1 = cal.getTime();
-		String reportDate = sdf.format(date1);
 		for (int date = 0; date < 5; date++) {
 			cal.add(Calendar.DAY_OF_MONTH, -1);
 			date1 = cal.getTime();
 			reportDate = sdf.format(date1);
-			//System.out.println(reportDate);
+			System.out.println(reportDate);
 			for (int leadTime = 0; leadTime < 2; leadTime++){
 				for (int time = 9; time <= 18; time += 3) {
 					LocationForecastWSMap forecasts = this.getWeatherSourcesByLocationName(name, time, String.valueOf(reportDate), leadTime);
 					metoffice_fe.add(forecasts.get("MettOffice"));
 					forecastio_fe.add(forecasts.get("ForecastIO"));
 					observations_fe.add(forecasts.get("Observations"));
-					//System.out.println(time);
 				}
 			}
 		}
 
 		WSErrors metoffice_err;
 		WSErrors forecastio_err;
+		
+		System.out.println("Getting Calulations for " + name);
+		System.out.println("Date : " + String.valueOf(reportDate));
 		try {
 			metoffice_err = calculateErrorByWeatherSource(metoffice_fe, observations_fe);
 			forecastio_err = calculateErrorByWeatherSource(forecastio_fe, observations_fe);
-			System.out.println("Getting Calulations for " + name);
-			System.out.println("Metoffice Bias: "+metoffice_err.calculateBias());
-			System.out.println("Metoffice RMSE: "+metoffice_err.calculateRMSE());
-			System.out.println("ForecastIO Bias: "+forecastio_err.calculateBias());
-			System.out.println("ForecastIO RMSE: "+forecastio_err.calculateRMSE());
-			System.out.println("\n");
+			
+			DBObject dbObject = new BasicDBObject("location_name", name).append("Weather_Source", "MetOffice").append("BIAS", metoffice_err.calculateBias())
+									.append("RMSE",metoffice_err.calculateRMSE());
+			collection1.insert(dbObject);
+			DBObject dbObject1 = new BasicDBObject("location_name", name).append("Weather_Source", "ForecastIO").append("BIAS", forecastio_err.calculateBias())
+									.append("RMSE",forecastio_err.calculateRMSE());
+			collection1.insert(dbObject1);
 		} catch (Exception e) {
 			System.out.println("Skipping "+name+". "+e.getMessage()); 
 			System.out.println("\n");
