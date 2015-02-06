@@ -59,8 +59,6 @@ public class ObservationsHarvester {
 					JSONObject rep = null;
 
 					try {
-				
-
 							if (period.has("Period")) {	
 								JSONObject period2 = period.getJSONObject("Period");
 								rep = period2.getJSONObject("Rep");
@@ -101,7 +99,7 @@ public class ObservationsHarvester {
 					}
 					}
 				}
-				System.out.println("Observations added Successfully");
+				logger.info("Observations added Successfully");
 			} 
 			catch (Exception e){
 				e.printStackTrace();
