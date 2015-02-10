@@ -19,4 +19,13 @@ public class LocationForecastWSMap {
     public ForecastEntry get(String weather_source) {
         return this.map.get(weather_source);
     }
-}
+    
+    public ForecastEntry get(ForecastEntry fe) {
+        return this.map.get(fe);
+    }
+    
+    public boolean hasData(){
+    	return !map.isEmpty();
+    	}
+    }
+    

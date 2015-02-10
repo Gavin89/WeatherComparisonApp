@@ -19,6 +19,11 @@ import WC.MetOfficeLocationProvider;
 import WC.WeatherLocation;
 import WeatherSource.WeatherSource;
 
+/**
+ * 
+ * @author Gavin Hardy
+ *
+ */
 public class MetOffice extends  WeatherSource{
 
 	private HashMap<String, String> summaryList;
@@ -67,6 +72,9 @@ public class MetOffice extends  WeatherSource{
 		// TODO Auto-generated constructor stub
 	}
 
+	/*
+	 * Method to parse the website URL
+	 */
 	private static String readUrl(String urlString) throws Exception {
 		BufferedReader reader = null;
 		try {
@@ -85,6 +93,7 @@ public class MetOffice extends  WeatherSource{
 		}
 	}
 
+	
 	public double getRoundedTemp(double temperature){
 
 		if (temperature - Math.floor(temperature) >=0.5) { 
