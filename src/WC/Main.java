@@ -10,6 +10,28 @@ public class Main {
 	public static void main(String[] args) throws UnknownHostException {
 	    final Logger logger = LoggerFactory.getLogger(Main.class);
 	    logger.info("Starting Application");
+	    
+		if(args[0].equals("all")){
+			new Thread(new Runnable()
+			{
+
+				@Override
+				public void run() {
+
+					try {
+						new ObservationsHarvester();
+						new DataCollector();
+						new DataAnalyser();
+
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			}).start();
+		}
+
+		
 		if(args[0].equals("collect")){
 			new Thread(new Runnable()
 			{
@@ -30,9 +52,10 @@ public class Main {
 		}
 
 		if(args[0].equals("calculate")){
-			DataAnalyser da = new DataAnalyser();
-			da.run();
+			new DataAnalyser();
+
 		}
+		
 	}
 }
 
