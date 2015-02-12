@@ -137,10 +137,10 @@ public class DataAnalyser {
 			Date date = cal1.getTime();
 			String currentDate = sdf1.format(date);
 
-			DBObject dbObject = new BasicDBObject("location_name", locationName).append("Weather_Source", "MetOffice").append("BIAS", metoffice_err.calculateBias())
+			DBObject dbObject = new BasicDBObject("location_name", locationName).append("weather_source", "MetOffice").append("BIAS", metoffice_err.calculateBias())
 					.append("RMSE",metoffice_err.calculateRMSE()).append("date", currentDate);
 			collection1.insert(dbObject);
-			DBObject dbObject1 = new BasicDBObject("location_name", locationName).append("Weather_Source", "ForecastIO").append("BIAS", forecastio_err.calculateBias())
+			DBObject dbObject1 = new BasicDBObject("location_name", locationName).append("weather_source", "ForecastIO").append("BIAS", forecastio_err.calculateBias())
 					.append("RMSE",forecastio_err.calculateRMSE()).append("date", currentDate);
 			collection1.insert(dbObject1);
 
@@ -160,7 +160,6 @@ public class DataAnalyser {
 			DBObject resultElement = null;
 			resultElement = cur.next();
 			String locationName = (String) resultElement.get("name");	
-			//System.out.println(locationName);
 			processWeatherLocation(locationName);
 		}
 	}
