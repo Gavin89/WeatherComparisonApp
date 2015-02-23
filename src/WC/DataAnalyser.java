@@ -117,7 +117,7 @@ public class DataAnalyser {
 
 					LocationForecastWSMap forecasts = this.getWeatherSourcesByLocationName(locationName, time, String.valueOf(reportDate), leadTime);
 					if(forecasts.hasData()){
-						metoffice_fe.add(forecasts.get("MettOffice"));
+						metoffice_fe.add(forecasts.get("MetOffice"));
 						forecastio_fe.add(forecasts.get("ForecastIO"));
 						observations_fe.add(forecasts.get("Observations"));
 					}

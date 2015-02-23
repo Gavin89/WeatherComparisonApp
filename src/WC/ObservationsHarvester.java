@@ -1,6 +1,7 @@
 package WC;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.text.ParseException;
@@ -10,7 +11,6 @@ import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,11 +32,15 @@ public class ObservationsHarvester {
 
 	private void collect() throws Exception{
 
-		try {
-			logger.info("Adding Observations to database");
-			for(int j = 9; j <=18; j+=3){
 
+		logger.info("Adding Observations to database");
+		for(int j = 9; j <=18; j+=3){
+			try {
 				json = new JSONObject(readUrl("http://datapoint.metoffice.gov.uk/public/data/val/wxobs/all/json/all?res=hourly&time=" + this.getYesterdayDate() + "T" + j + "Z&key=cb3f0007-c6a0-4633-9166-7fbbc8e76c9f"));
+				if(json == null){
+					logger.warn("Observation unavailable", json.toString());
+					continue;
+				}
 				try{
 					db = MongoDB.getMongoInstance().getDB("weatherDB");
 				}
@@ -59,16 +63,16 @@ public class ObservationsHarvester {
 					JSONObject rep = null;
 
 					try {
-							if (period.has("Period")) {	
-								JSONObject period2 = period.getJSONObject("Period");
-								rep = period2.getJSONObject("Rep");
-							} else {
-								rep = period.getJSONObject("Rep");
-							}
-						} catch (JSONException e) {
-							System.out.println(locationArr.getJSONObject(i).toString());
+						if (period.has("Period")) {	
+							JSONObject period2 = period.getJSONObject("Period");
+							rep = period2.getJSONObject("Rep");
+						} else {
+							rep = period.getJSONObject("Rep");
 						}
-					
+					} catch (JSONException e) {
+						System.out.println(locationArr.getJSONObject(i).toString());
+					}
+
 					if (rep != null) {
 
 						String date = (String) period.get("value");
@@ -92,83 +96,88 @@ public class ObservationsHarvester {
 						}
 						else {
 						}
-						
+
 					} else {
 						logger.warn("Observation " + name + " was not added");
-						
-					}
 					}
 				}
+
 				logger.info("Observations added Successfully");
-			} 
-			catch (Exception e){
+			}
+			catch (JSONException | IOException e){
+				if(e.getMessage().startsWith("Server returned HTTP response code: 504 for URL")){
+					logger.error("Unable to get Observations for " + j);
+					continue;
+				}
 				e.printStackTrace();
 				logger.error("Unable to populate observations", json.toString());
 			}
-		}
+		} 
 
-		public String words(String word){
+	}
 
-			StringBuffer res = new StringBuffer();
-			String lowerCaseWord = word.toLowerCase();
-			String[] strArr = lowerCaseWord.split(" ");
+	public String words(String word){
 
-			int index = 0;
-			for (String str : strArr) {
-				char[] stringArray = str.trim().toCharArray();
+		StringBuffer res = new StringBuffer();
+		String lowerCaseWord = word.toLowerCase();
+		String[] strArr = lowerCaseWord.split(" ");
 
-				index++;
+		int index = 0;
+		for (String str : strArr) {
+			char[] stringArray = str.trim().toCharArray();
 
-				if (stringArray.length > 0) {
-					stringArray[0] = Character.toUpperCase(stringArray[0]);
-					str = new String(stringArray);
+			index++;
 
-					if (index == strArr.length) {
-						res.append(str);
-					} else {
-						res.append(str).append(" ");
-					}
+			if (stringArray.length > 0) {
+				stringArray[0] = Character.toUpperCase(stringArray[0]);
+				str = new String(stringArray);
+
+				if (index == strArr.length) {
+					res.append(str);
+				} else {
+					res.append(str).append(" ");
 				}
 			}
-			return res.toString();
 		}
+		return res.toString();
+	}
 
-		private static String readUrl(String urlString) throws Exception {
-			BufferedReader reader = null;
-			try {
-				URL url = new URL(urlString);
-				reader = new BufferedReader(new InputStreamReader(url.openStream()));
-				StringBuffer buffer = new StringBuffer();
-				int read;
-				char[] chars = new char[1024];
-				while ((read = reader.read(chars)) != -1)
-					buffer.append(chars, 0, read); 
+	private static String readUrl(String urlString) throws Exception {
+		BufferedReader reader = null;
+		try {
+			URL url = new URL(urlString);
+			reader = new BufferedReader(new InputStreamReader(url.openStream()));
+			StringBuffer buffer = new StringBuffer();
+			int read;
+			char[] chars = new char[1024];
+			while ((read = reader.read(chars)) != -1)
+				buffer.append(chars, 0, read); 
 
-				return buffer.toString();
-			} finally {
-				if (reader != null)
-					reader.close();
-			}
-		}
-
-		public String parseDate(String value) throws ParseException{
-
-			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-			Date date = simpleDateFormat.parse(value);
-			SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-
-			return formatter.format(date);
-		}
-
-		public String getYesterdayDate() {
-			java.util.Date  now = new Date();
-			Calendar cal = Calendar.getInstance();
-			cal.setTime(now);	
-			cal.add(Calendar.DAY_OF_YEAR, -1);
-			Date yesterday = cal.getTime();
-			SimpleDateFormat formatter5=new SimpleDateFormat("yyyy-MM-dd");
-			String formats1 = formatter5.format(yesterday);
-
-			return formats1;
+			return buffer.toString();
+		} finally {
+			if (reader != null)
+				reader.close();
 		}
 	}
+
+	public String parseDate(String value) throws ParseException{
+
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = simpleDateFormat.parse(value);
+		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+
+		return formatter.format(date);
+	}
+
+	public String getYesterdayDate() {
+		java.util.Date  now = new Date();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(now);	
+		cal.add(Calendar.DAY_OF_YEAR, -1);
+		Date yesterday = cal.getTime();
+		SimpleDateFormat formatter5=new SimpleDateFormat("yyyy-MM-dd");
+		String formats1 = formatter5.format(yesterday);
+
+		return formats1;
+	}
+}

@@ -124,7 +124,7 @@ public class MetOffice extends  WeatherSource{
 	}
 
 	public String getName(){
-		return "MettOffice";
+		return "MetOffice";
 	}
 
 	public void summaryList() {
