@@ -1,5 +1,6 @@
 package WC;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import org.slf4j.Logger;
@@ -28,8 +29,12 @@ public class WSErrors {
 		else {
 			logger.warn("BIAS could not be cacultated - no enough values");
 		}
-
-		return sum / this.errs.size();
+		double bias = sum / this.errs.size();
+		
+		DecimalFormat df = new DecimalFormat("#.##");
+		double finalBIAS = Double.valueOf(df.format(bias));
+		 
+		return finalBIAS;
 	}
 
 	public double calculateRMSE() {
@@ -46,8 +51,10 @@ public class WSErrors {
 			logger.warn("RMSE could not be calculated - not enough values");
 		}
 
-		double finalRMSE = Math.sqrt(rmse / (n - 1));
-
+		double RMSE = Math.sqrt(rmse / (n - 1));
+		
+		DecimalFormat df = new DecimalFormat("#.##");
+		double finalRMSE = Double.valueOf(df.format(RMSE));
 		return finalRMSE;
 	}
 

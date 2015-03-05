@@ -21,6 +21,8 @@ public class DataAnalyser {
 	private DB db;
 	private DBCursor cursor;
 	private Logger logger;
+	private String lat;
+	private String lng;
 
 	public DataAnalyser() {
 		try {
@@ -41,6 +43,7 @@ public class DataAnalyser {
 		whereQuery.put("location_name", locName);
 		whereQuery.put("time", time);
 		whereQuery.put("date", date);
+		
 		//whereQuery.put("lead_time", leadTime);
 		try{
 			cursor = collection.find(whereQuery);
@@ -53,8 +56,9 @@ public class DataAnalyser {
 			while (cursor.hasNext()){
 				DBObject obj = cursor.next();
 				//Create ForecastEntry
-				String lat = obj.get("latitude").toString();
-				String lng = obj.get("longitude").toString();
+				
+				lat = obj.get("latitude").toString();
+				lng = obj.get("longitude").toString();
 
 				WeatherLocation location = new WeatherLocation(locName, Double.parseDouble(lat) ,
 						Double.parseDouble(lng), "");
@@ -101,7 +105,7 @@ public class DataAnalyser {
 		ArrayList<ForecastEntry> metoffice_fe = new ArrayList<ForecastEntry>();
 		ArrayList<ForecastEntry> forecastio_fe = new ArrayList<ForecastEntry>();
 		ArrayList<ForecastEntry> observations_fe = new ArrayList<ForecastEntry>();
-
+	
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 		Calendar cal = Calendar.getInstance();
 		Date date1 = cal.getTime();
@@ -117,6 +121,7 @@ public class DataAnalyser {
 
 					LocationForecastWSMap forecasts = this.getWeatherSourcesByLocationName(locationName, time, String.valueOf(reportDate), leadTime);
 					if(forecasts.hasData()){
+					
 						metoffice_fe.add(forecasts.get("MetOffice"));
 						forecastio_fe.add(forecasts.get("ForecastIO"));
 						observations_fe.add(forecasts.get("Observations"));
@@ -141,7 +146,7 @@ public class DataAnalyser {
 					.append("RMSE",metoffice_err.calculateRMSE()).append("date", currentDate);
 			collection1.insert(dbObject);
 			DBObject dbObject1 = new BasicDBObject("location_name", locationName).append("weather_source", "ForecastIO").append("BIAS", forecastio_err.calculateBias())
-					.append("RMSE",forecastio_err.calculateRMSE()).append("date", currentDate);
+					.append("RMSE",forecastio_err.calculateRMSE()).append("date", currentDate).append("longitude", lng).append("latitude", lat);
 			collection1.insert(dbObject1);
 
 		} catch (Exception e) {

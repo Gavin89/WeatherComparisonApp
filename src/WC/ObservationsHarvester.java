@@ -36,7 +36,7 @@ public class ObservationsHarvester {
 		logger.info("Adding Observations to database");
 		for(int j = 9; j <=18; j+=3){
 			try {
-				json = new JSONObject(readUrl("http://datapoint.metoffice.gov.uk/public/data/val/wxobs/all/json/all?res=hourly&time=" + this.getYesterdayDate() + "T" + j + "Z&key=cb3f0007-c6a0-4633-9166-7fbbc8e76c9f"));
+				json = new JSONObject(readUrl("http://datapoint.metoffice.gov.uk/public/data/val/wxobs/all/json/all?res=hourly&time=" + this.getYesterdayDate() + "T20Z&key=cb3f0007-c6a0-4633-9166-7fbbc8e76c9f"));
 				if(json == null){
 					logger.warn("Observation unavailable", json.toString());
 					continue;
@@ -100,9 +100,7 @@ public class ObservationsHarvester {
 					} else {
 						logger.warn("Observation " + name + " was not added");
 					}
-				}
-
-				logger.info("Observations added Successfully");
+				}			
 			}
 			catch (JSONException | IOException e){
 				if(e.getMessage().startsWith("Server returned HTTP response code: 504 for URL")){
@@ -112,7 +110,7 @@ public class ObservationsHarvester {
 				e.printStackTrace();
 				logger.error("Unable to populate observations", json.toString());
 			}
-		} 
+		} logger.info("Observations added Successfully");
 
 	}
 

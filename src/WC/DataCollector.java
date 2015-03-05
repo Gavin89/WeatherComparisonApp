@@ -39,10 +39,8 @@ public class DataCollector {
 			WeatherSourcesProvider wsProvider = new WeatherSourcesProvider(loc);
 
 			for (WeatherSource ws : wsProvider) {
-				//System.out.println("Getting forecasts from: " + ws.getName());
 				ArrayList<ForecastItem> items = ws.getForecasts();
 				if(ws.getForecasts()!= null){
-					//System.out.println("Populating Database with data from: " + ws.getName());
 					for(ForecastItem item : items){
 
 						this.populateTempDB(loc.getLocationName(), ws.getName(), item.getTime(), item.getTemp(), item.getWindspeed(), 
@@ -52,7 +50,6 @@ public class DataCollector {
 				else {
 					logger.warn("Unable to add " + ws.getName() + "to the database due to no data");
 				}
-				//System.out.println("Database successfully updated from source: " + ws.getName());
 			}			
 		}
 		logger.info("Database successfully populated");
