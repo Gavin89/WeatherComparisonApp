@@ -26,16 +26,25 @@ public class LocationsProvider implements Iterable<WeatherLocation> {
 	    logger = LoggerFactory.getLogger(LocationsProvider.class);
 	    
 	    logger.info("Collecting locations");
-	    
+	    try{
 		db = MongoDB.getMongoInstance().getDB("locations");
+	    }
+			catch(Exception e){
+				logger.error(e.getMessage());
+			}
 		this.locations = new HashMap<String, WeatherLocation>();
 		this.populateLocations();
 	}
 
 	private void populateLocations() throws UnknownHostException {
 
-		
+		try{
 		collection = db.getCollection("locations");
+		}
+		catch (Exception e){
+			logger.error(e.getMessage());
+		}
+		
 		object = new BasicDBObject();
 		cur = collection.find(object);
 		while(cur.hasNext()){
@@ -47,7 +56,12 @@ public class LocationsProvider implements Iterable<WeatherLocation> {
 			String locationId = null;	
 			this.locations.put(locationName, new WeatherLocation(locationName, Double.parseDouble(longitude), Double.parseDouble(latitude), locationId));	
 		}
+		if(this.locations.size() == 133){
 		logger.info("Locations Collected");
+		}
+		else {
+			logger.error("Locations was not Collected");
+		}
 	}
 
 	public WeatherLocation getLocationByName(String name) {

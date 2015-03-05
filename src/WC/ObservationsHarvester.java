@@ -108,9 +108,10 @@ public class ObservationsHarvester {
 				if(e.getMessage().startsWith("Server returned HTTP response code: 504 for URL")){
 					logger.error("Unable to get Observations for " + j);
 					continue;
-				}
+				}else {
 				e.printStackTrace();
 				logger.error("Unable to populate observations", json.toString());
+				}
 			}
 		} 
 
