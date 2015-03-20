@@ -67,8 +67,15 @@ public class DataCollector {
 		// get a single collection
 		collection = db.getCollection("weatherData");
 		DBObject dbObject = new BasicDBObject("time", time).append("weather_source", sourceName).append("location_name", locationName).append("temperature", temp)
-				.append("windspeed", windspeed).append("date",  date).append("latitude", latitude).append("longitude", longitude).append("summary", summary).append("lead_time",  leadTime);
-		try{
+				.append("windspeed", windspeed).append("date",  date).append("summary", summary).append("lead_time",  leadTime);
+		
+		//geoNear spatial mongodb
+		double x = longitude;
+		double y = latitude;
+		
+		double [] location = new double [] {x, y};
+		dbObject.put("loc", location);
+		try{			
 			collection.insert(dbObject);
 			// TODO Auto-generated method stub
 		}
