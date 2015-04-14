@@ -9,6 +9,7 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -21,8 +22,10 @@ public class DataAnalyser {
 	private DB db;
 	private DBCursor cursor;
 	private Logger logger;
-	private String lat;
-	private String lng;
+	private Double lat;
+	private Double lng;
+	private BasicDBList loc;
+	private DBObject obj;
 
 	public DataAnalyser() {
 		try {
@@ -43,25 +46,23 @@ public class DataAnalyser {
 		whereQuery.put("location_name", locName);
 		whereQuery.put("time", time);
 		whereQuery.put("date", date);
-		
+
 		//whereQuery.put("lead_time", leadTime);
 		try{
+			obj = null;
 			cursor = collection.find(whereQuery);
-		}
-		catch (Exception e){
-			logger.warn("No Entry Found at " + date.toString());
-			return entries;
-		}
-		try {
-			while (cursor.hasNext()){
-				DBObject obj = cursor.next();
-				//Create ForecastEntry
-				
-				lat = obj.get("latitude").toString();
-				lng = obj.get("longitude").toString();
 
-				WeatherLocation location = new WeatherLocation(locName, Double.parseDouble(lat) ,
-						Double.parseDouble(lng), "");
+			while (cursor.hasNext()){
+				obj = cursor.next();
+				//Create ForecastEntry
+				loc = (BasicDBList) obj.get("loc");
+				if (loc != null) {     
+					lat = (Double) loc.get(0);
+					lng = (Double) loc.get(1);
+				}
+
+				WeatherLocation location = new WeatherLocation(locName, lat,
+						lng, "");
 
 				String weather_source = (String) obj.get("weather_source");
 
@@ -76,8 +77,9 @@ public class DataAnalyser {
 			}
 		}
 		catch (Exception e){
-			logger.error("No query found " + e.getMessage());
-			e.printStackTrace();
+			logger.warn("No Entry Found at " + date.toString());
+			//boolean failed;
+			return entries;
 		}
 		finally {
 			cursor.close();
@@ -87,15 +89,19 @@ public class DataAnalyser {
 
 	private WSErrors calculateErrorByWeatherSource(ArrayList<ForecastEntry> wsFEs, ArrayList<ForecastEntry> obsFEs) throws Exception {
 		WSErrors wsErrors = new WSErrors();
-
+		try{
 		for (int i = 0; i < 4; i++) {
-
+			System.out.println(wsFEs.get(i));
 			ForecastEntry wsFE = wsFEs.get(i);
 			ForecastEntry obsFE = obsFEs.get(i);
 			if (obsFE.getTemperature() != null && wsFE.getTemperature() !=null) {
 				wsErrors.addError(wsFE.getTemperature() - obsFE.getTemperature());
 			} else {
 			}           
+		}
+		}
+		catch (Exception e){
+			e.printStackTrace();
 		}
 
 		return wsErrors;
@@ -105,38 +111,45 @@ public class DataAnalyser {
 		ArrayList<ForecastEntry> metoffice_fe = new ArrayList<ForecastEntry>();
 		ArrayList<ForecastEntry> forecastio_fe = new ArrayList<ForecastEntry>();
 		ArrayList<ForecastEntry> observations_fe = new ArrayList<ForecastEntry>();
-	
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-		Calendar cal = Calendar.getInstance();
-		Date date1 = cal.getTime();
-		for (int date = 0; date < 5; date++) {
-			cal.add(Calendar.DAY_OF_MONTH, -1);
-			date1 = cal.getTime();
 
-			String reportDate = sdf.format(date1);
+		try{
+			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+			Calendar cal = Calendar.getInstance();
+			Date date1 = cal.getTime();
+			for (int date = 0; date < 2; date++) {
+				cal.add(Calendar.DAY_OF_MONTH, -1);
+				date1 = cal.getTime();
 
-			for (int leadTime = 0; leadTime < 2; leadTime++){
+				String reportDate = sdf.format(date1);
 
-				for (int time = 9; time <= 18; time += 3) {
+				for (int leadTime = 0; leadTime < 2; leadTime++){
 
-					LocationForecastWSMap forecasts = this.getWeatherSourcesByLocationName(locationName, time, String.valueOf(reportDate), leadTime);
-					if(forecasts.hasData()){
-					
-						metoffice_fe.add(forecasts.get("MetOffice"));
-						forecastio_fe.add(forecasts.get("ForecastIO"));
-						observations_fe.add(forecasts.get("Observations"));
+					for (int time = 9; time <= 18; time += 3) {
+
+						LocationForecastWSMap forecasts = this.getWeatherSourcesByLocationName(locationName, time, String.valueOf(reportDate), leadTime);
+						if(forecasts.hasData()){
+
+							metoffice_fe.add(forecasts.get("MetOffice"));
+							// forecastio_fe.add(forecasts.get("ForecastIO"));
+							observations_fe.add(forecasts.get("Observations"));
+						}
 					}
 				}
+
 			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
 		}
 
 		WSErrors metoffice_err;
 		WSErrors forecastio_err;
+		System.out.println("SIZE" + metoffice_fe.size());
 
 		try {
 			metoffice_err = calculateErrorByWeatherSource(metoffice_fe, observations_fe);
-			forecastio_err = calculateErrorByWeatherSource(forecastio_fe, observations_fe);
-			
+			//forecastio_err = calculateErrorByWeatherSource(forecastio_fe, observations_fe);
+
 			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
 			Calendar cal1 = Calendar.getInstance();
 			Date date = cal1.getTime();
@@ -145,12 +158,13 @@ public class DataAnalyser {
 			DBObject dbObject = new BasicDBObject("location_name", locationName).append("weather_source", "MetOffice").append("BIAS", metoffice_err.calculateBias())
 					.append("RMSE",metoffice_err.calculateRMSE()).append("date", currentDate);
 			collection1.insert(dbObject);
-			DBObject dbObject1 = new BasicDBObject("location_name", locationName).append("weather_source", "ForecastIO").append("BIAS", forecastio_err.calculateBias())
-					.append("RMSE",forecastio_err.calculateRMSE()).append("date", currentDate).append("longitude", lng).append("latitude", lat);
-			collection1.insert(dbObject1);
+//			DBObject dbObject1 = new BasicDBObject("location_name", locationName).append("weather_source", "ForecastIO").append("BIAS", forecastio_err.calculateBias())
+//					.append("RMSE",forecastio_err.calculateRMSE()).append("date", currentDate).append("longitude", lng).append("latitude", lat);
+//			collection1.insert(dbObject1);
 
 		} catch (Exception e) {
-			System.out.println("Skipping "+locationName+". "+e.getMessage()); 
+			e.printStackTrace();
+			logger.error("Skipping "+locationName+". "+e.getMessage()); 
 		}
 
 	}

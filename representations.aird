@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<viewpoint:DAnalysis xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:description="http://www.obeo.fr/dsl/viewpoint/description/1.1.0" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xmlns:viewpoint="http://www.obeo.fr/dsl/viewpoint/1.1.0" xsi:schemaLocation="http://www.obeo.fr/dsl/viewpoint/description/1.1.0 http://www.obeo.fr/dsl/viewpoint/1.1.0#//description" xmi:id="_fkgKsKuIEeSzEqyo04CSLA" selectedViews="_h_FWwKuIEeSzEqyo04CSLA _iMA_gKuIEeSzEqyo04CSLA _iML-oKuIEeSzEqyo04CSLA" version="6.5.0.201210011230">
-  <models xmi:type="uml:Model" href="my.uml#_FxQZoKuJEeSzEqyo04CSLA"/>
+<viewpoint:DAnalysis xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:description="http://www.obeo.fr/dsl/viewpoint/description/1.1.0" xmlns:viewpoint="http://www.obeo.fr/dsl/viewpoint/1.1.0" xsi:schemaLocation="http://www.obeo.fr/dsl/viewpoint/description/1.1.0 http://www.obeo.fr/dsl/viewpoint/1.1.0#//description" xmi:id="_fkgKsKuIEeSzEqyo04CSLA" selectedViews="_h_FWwKuIEeSzEqyo04CSLA _iMA_gKuIEeSzEqyo04CSLA _iML-oKuIEeSzEqyo04CSLA" version="6.8.0.201307151200">
   <ownedViews xmi:type="viewpoint:DRepresentationContainer" xmi:id="_h_FWwKuIEeSzEqyo04CSLA" initialized="true">
     <viewpoint xmi:type="description:Viewpoint" href="platform:/plugin/org.obeonetwork.dsl.uml2.design/description/uml2.odesign#//@ownedViewpoints[name='UML%20Extensions']"/>
   </ownedViews>

@@ -36,7 +36,8 @@ public class ObservationsHarvester {
 		logger.info("Adding Observations to database");
 		for(int j = 9; j <=18; j+=3){
 			try {
-				json = new JSONObject(readUrl("http://datapoint.metoffice.gov.uk/public/data/val/wxobs/all/json/all?res=hourly&time=" + this.getYesterdayDate() + "T20Z&key=cb3f0007-c6a0-4633-9166-7fbbc8e76c9f"));
+				json = new JSONObject(readUrl("http://datapoint.metoffice.gov.uk/public/data/val/wxobs/all/json/all?res=hourly&time=" + this.getYesterdayDate() + 
+						"T" + j + "Z&key=cb3f0007-c6a0-4633-9166-7fbbc8e76c9f"));
 				if(json == null){
 					logger.warn("Observation unavailable", json.toString());
 					continue;
@@ -70,7 +71,7 @@ public class ObservationsHarvester {
 							rep = period.getJSONObject("Rep");
 						}
 					} catch (JSONException e) {
-						System.out.println(locationArr.getJSONObject(i).toString());
+						logger.error(locationArr.getJSONObject(i).toString());
 					}
 
 					if (rep != null) {
@@ -78,12 +79,17 @@ public class ObservationsHarvester {
 						String date = (String) period.get("value");
 						String temperature = " ";
 						String windspeed = " ";
+						
+						//check to see if the location has a temperature
 						if(rep.has("T")){
 							temperature = (String) rep.get("T");
 						}
+						
+						//check to see if the location has a windspeed
 						if(rep.has("S")){
 							windspeed = (String) rep.get("S");
 						}
+						
 						int time = Integer.parseInt(rep.getString("$"));
 						int newTime = time/60;	
 
@@ -107,8 +113,9 @@ public class ObservationsHarvester {
 					logger.error("Unable to get Observations for " + j);
 					continue;
 				}else {
-				e.printStackTrace();
 				logger.error("Unable to populate observations", json.toString());
+				e.printStackTrace();
+				continue;
 				}
 			}
 		} logger.info("Observations added Successfully");
@@ -169,10 +176,8 @@ public class ObservationsHarvester {
 	}
 
 	public String getYesterdayDate() {
-		java.util.Date  now = new Date();
 		Calendar cal = Calendar.getInstance();
-		cal.setTime(now);	
-		cal.add(Calendar.DAY_OF_YEAR, -1);
+		cal.add(Calendar.DATE, -1);
 		Date yesterday = cal.getTime();
 		SimpleDateFormat formatter5=new SimpleDateFormat("yyyy-MM-dd");
 		String formats1 = formatter5.format(yesterday);

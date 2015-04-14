@@ -40,13 +40,16 @@ public class MetOffice extends  WeatherSource{
 			String locationId = newLocation.getLocationId();
 
 			try {
-				JSONObject json = new JSONObject(readUrl("http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/" + locationId + "?res=3hourly&key=cb3f0007-c6a0-4633-9166-7fbbc8e76c9f"));
+				JSONObject json = new JSONObject(readUrl("http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/" 
+						+ locationId + "?res=3hourly&key=cb3f0007-c6a0-4633-9166-7fbbc8e76c9f"));
 
 				JSONObject siteRep = json.getJSONObject("SiteRep");
 				JSONObject dv = siteRep.getJSONObject("DV");
 				JSONObject locationObj = dv.getJSONObject("Location");
 				JSONArray periods = locationObj.getJSONArray("Period");
-				for(int i = 0; i < 5; i ++){
+				
+				//gather the next two days of forecasts
+				for(int i = 0; i < 2; i ++){
 					JSONObject value = periods.getJSONObject(i);
 					JSONArray rep = value.getJSONArray("Rep");
 					for(int j = 0; j < rep.length(); j++){
@@ -64,7 +67,6 @@ public class MetOffice extends  WeatherSource{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -131,35 +133,35 @@ public class MetOffice extends  WeatherSource{
 
 		summaryList.put("NA", "Not available");
 		summaryList.put("0", "Clear night");
-		summaryList.put("1", "Sunny day");
-		summaryList.put("2", "Partly cloudy (night)");
-		summaryList.put("3", "Partly cloudy (day)");
+		summaryList.put("1", "Sunny");
+		summaryList.put("2", "Partly cloudy");
+		summaryList.put("3", "Partly cloudy");
 		summaryList.put("4", "Not used");
 		summaryList.put("5", "Mist");
 		summaryList.put("6", "Fog");
 		summaryList.put("7", "Cloudy");
 		summaryList.put("8", "Overcast");
-		summaryList.put("9", "Light rain shower (night)");
-		summaryList.put("10", "Light rain shower (day)");
+		summaryList.put("9", "Light rain");
+		summaryList.put("10", "Light rain");
 		summaryList.put("11", "Drizzle");
 		summaryList.put("12", "Light rain");
-		summaryList.put("13", "Heavy rain shower (night)");
-		summaryList.put("14", "Heavy rain shower (day)");
+		summaryList.put("13", "Heavy rain");
+		summaryList.put("14", "Heavy rain");
 		summaryList.put("15", "Heavy rain");
-		summaryList.put("16", "Sleet shower(night)");
-		summaryList.put("17", "Sleet shower (day)");
+		summaryList.put("16", "Sleet");
+		summaryList.put("17", "Sleet");
 		summaryList.put("18", "Sleet");
-		summaryList.put("19", "Hail shower (night)");
-		summaryList.put("20", "Hail shower (day)");
+		summaryList.put("19", "Hail");
+		summaryList.put("20", "Hail");
 		summaryList.put("21", "Hail");
-		summaryList.put("22", "Light snow shower (night)");
-		summaryList.put("23", "Light snow shower (day)");
+		summaryList.put("22", "Light snow");
+		summaryList.put("23", "Light snow");
 		summaryList.put("24", "Light snow");
-		summaryList.put("25", "Heavy snow shower (night)");
-		summaryList.put("26", "Heavy snow shower (day)");
+		summaryList.put("25", "Heavy snow");
+		summaryList.put("26", "Heavy snow");
 		summaryList.put("27", "Heavy snow");
-		summaryList.put("28", "Thunder shower (night)");
-		summaryList.put("29", "Thunder shower (day)");
+		summaryList.put("28", "Thunder");
+		summaryList.put("29", "Thunder");
 		summaryList.put("30", "Thunder");
 	}
 }
